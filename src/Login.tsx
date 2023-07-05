@@ -54,7 +54,7 @@ const Login = function Login(){
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="password"
                   type="password"
                   id="password"
                   autoComplete="current-password"
