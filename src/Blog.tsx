@@ -1,38 +1,24 @@
+import { Outlet } from 'react-router-dom'
 import Header from './Header'
-import { useState } from 'react'
 
 
+const Blog = function Blog() {
+  
 
-
-
-function Blog() {
-  const [count, setCount] = useState(0)
-
+  //under header should be a react router component. 
+  // :  Landing page "Main.tsx" goes inside here, under Header.
+  // : /signup 
+  // : /login
+  // : /edit profile
+  // error page and mayb sidebars and stuff.
+  //There's also a 'fallback' (hint would be great to avoid state) thing and forms. 
   return (
     <>
       <Header username="User"/>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          vite logo
-        </a>
-        <a href="https://react.dev" target="_blank">
-          react logo
-        </a>
-      </div>
-      <h1>Vie + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Outlet />
     </>
   )
 }
+
 
 export default Blog
