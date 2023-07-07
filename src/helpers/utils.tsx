@@ -8,11 +8,11 @@ export const produceDefaultErrorPairs = function(errorKeys:string[]){
         }
     };
 
-    const defaultErrorValue = produceDefaultErrorValue()
+    const generalError = ['general', produceDefaultErrorValue()]
 
-    return errorKeys.map(function convertToKeyValues(key){
-        return [key, defaultErrorValue]
-    })
+    return [generalError, ...errorKeys.map(function convertToKeyValues(key){
+        return [key, produceDefaultErrorValue()]
+    })]
 
 };
 
