@@ -8,16 +8,30 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useErrorStates } from './helpers/hooks';
+import { checkReferred, settleErrors } from './helpers/services';
 
  
 const Signup = function Signup(){
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const [errors,setErrors] = useErrorStates(['first_name', 'last_name', 'username', 'password', 'privilege_code', 'admin_code']);
+
+  const signUpFetcher = async function(data:FormData){
+    const response = await fetch("update this url when ready", { //Update url when ready.
+      body: data,
+      headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+      method: 'POST', 
+      mode: 'cors',
+      redirect: 'follow', 
+      referrer: window.location.href
+    })
+    return checkReferred(response) || settleErrors(response,setErrors)  
+    }
+      
+    const handleSubmit = async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-          username: data.get('username'),
-          password: data.get('password'),
-        });
+        await signUpFetcher(data)
       };
     
       return (
@@ -38,71 +52,168 @@ const Signup = function Signup(){
                 Sign up
               </Typography>
               <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+              {errors.general.error ? (
+                  <Typography component="h2" variant="h6" sx={{color: "red"}}>
+                    {errors.general.msg}
+                  </Typography>
+                )
+                : false}
               <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
+                      {errors.first_name.error ? (
                         <TextField
+                        error
                         autoComplete="given-name"
-                        name="firstName"
+                        name="first_name"
                         required
                         fullWidth
-                        id="firstName"
+                        id="first_name"
+                        label="First Name"
+                        autoFocus
+                        helperText={errors.first_name.msg}
+                        />
+                      ):(
+                        <TextField
+                        autoComplete="given-name"
+                        name="first_name"
+                        required
+                        fullWidth
+                        id="first_name"
                         label="First Name"
                         autoFocus
                         />
+                      )}
                     </Grid>
                     <Grid item xs={12} sm={6}>
+                      {errors.last_name.error ? (
+                        <TextField
+                        error
+                        required
+                        fullWidth
+                        id="last_name"
+                        label="Last Name"
+                        name="last_name"
+                        autoComplete="family-name"
+                        helperText={errors.last_name.msg}
+                        />
+                      ):(
                         <TextField
                         required
                         fullWidth
-                        id="lastName"
+                        id="last_name"
                         label="Last Name"
-                        name="lastName"
+                        name="last_name"
                         autoComplete="family-name"
                         />
+                      )}
                     </Grid>
                     <Grid item xs={12}>
+                    {errors.username.error ? (
                         <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="username"
-                            label="username"
-                            name="username"
-                            autoComplete="username"
-                            autoFocus
-                         />
+                        error
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="username"
+                        label="username"
+                        name="username"
+                        autoComplete="username"
+                        autoFocus
+                        helperText={errors.username.msg}
+                        />
+                    )
+                    :
+                  (
+                        <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="username"
+                        label="username"
+                        name="username"
+                        autoComplete="username"
+                        autoFocus
+                        />
+                  )
+                }
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="password"
-                            type="password"
-                            id="password"
-                            autoComplete="new-password"
+                    {errors.password.error ? (
+                       <TextField
+                        error
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="password"
+                        type="password"
+                        id="password"
+                        autoComplete="new-password"
+                        helperText={errors.password.msg}
+                   />
+                    ) : 
+                    (
+                       <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="password"
+                        type="password"
+                        id="password"
+                        autoComplete="new-password"
                         />
+                    )}
+                       
                     </Grid>
                     <Grid item xs={12} sm={6}>
+                      {errors.privilege_code.error ? (
                         <TextField
-                            margin="normal"
-                            fullWidth
-                            label="Privilege Code"
-                            name="privilege_code"
-                            type="password"
-                            id="privilege_code"
+                        error
+                        margin="normal"
+                        fullWidth
+                        label="Privilege Code"
+                        name="privilege_code"
+                        type="password"
+                        id="privilege_code"
+                        helperText={errors.privilege_code.msg}
+                    />
+
+                      ) : (
+                        <TextField
+                        margin="normal"
+                        fullWidth
+                        label="Privilege Code"
+                        name="privilege_code"
+                        type="password"
+                        id="privilege_code"
                         />
+                      )}
+                        
                     </Grid>
                     <Grid item xs={12} sm={6}>
+                      {errors.admin_code.error ? (
                         <TextField
-                            margin="normal"
-                            fullWidth
-                            label="Admin Code"
-                            name="admin_code"
-                            type="password"
-                            id="admin_code"
-                        />
+                        error
+                        margin="normal"
+                        fullWidth
+                        label="Admin Code"
+                        name="admin_code"
+                        type="password"
+                        id="admin_code"
+                        helperText={errors.admin_code.msg}
+                      />
+                      ) : (
+                        <TextField
+                        margin="normal"
+                        fullWidth
+                        label="Admin Code"
+                        name="admin_code"
+                        type="password"
+                        id="admin_code"
+                          />
+                      )}
+                        
                     </Grid>    
                 </Grid>             
                 <Button
