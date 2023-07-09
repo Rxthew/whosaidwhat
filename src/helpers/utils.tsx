@@ -1,3 +1,11 @@
+import { PostsType } from "./types";
+
+export const extractPostById = function(id:string, posts:PostsType){
+    const post = posts.find(post => post._id === id)
+    return post
+};
+
+
 
 export const produceDefaultErrorPairs = function(errorKeys:string[]){
 
