@@ -30,5 +30,8 @@ export type PostsType = ReadonlyArray<PostInterface>
 
 export interface IndexInterface {
     user: UserInterface | null,
-    posts: PostsType | null
+    posts: PostsType | null,
+    resetIndexData: () => void,
+    setUser: React.Dispatch<React.SetStateAction<UserInterface | null>>
+    setPosts: React.Dispatch<React.SetStateAction<PostsType | null>>
 }
