@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
+import { IndexInterface } from "./types";
 import { produceDefaultErrorPairs } from "./utils";
+
 
 export const useErrorStates = function(errorParameters: string[]){
     
@@ -8,3 +11,8 @@ export const useErrorStates = function(errorParameters: string[]){
     
     return [errors,setErrors]
 };
+
+
+export const useIndexData = function(){
+    return useOutletContext<IndexInterface>()
+}
