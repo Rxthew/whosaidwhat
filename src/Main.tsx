@@ -6,17 +6,19 @@ import Container from '@mui/material/Container';
 import Comment from '@mui/icons-material/Comment'
 import CssBaseline  from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import { Link as PostLink } from 'react-router-dom';
 
 
 interface postPreviewProps {
   post: {
-    date: string;
-    content: string;
-    title: string;
+    _id: string,
+    date: string,
+    content: string,
+    title: string
   };
 }
-
 
 
 const PostPreview = function PostPreview(props: postPreviewProps) {
@@ -30,7 +32,7 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
 
   return (
     <Grid item xs={12} md={6}>
-      <CardActionArea component="a" href="#">
+      <CardActionArea component={PostLink} to={`/post/${post._id}`}>
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography component="h2" variant="h5">
@@ -43,9 +45,11 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
               {truncatePostContent(post.content)}
             </Typography>
             <Grid sx={{display: 'flex'}} justifyContent="space-between">
-              <Typography variant="subtitle1" color="primary">
-                  Continue reading...
-              </Typography>
+              <Link component={PostLink} to={`/post/${post._id}`}>
+                <Typography variant="subtitle1" color="primary">
+                    Continue reading...
+                </Typography>
+              </Link>     
               <Badge badgeContent={commentsCount} color="primary">
                 <Comment color="primary" titleAccess="CommentsIcon" fontSize='large' />
               </Badge>
@@ -63,6 +67,7 @@ const Main = function(){
    //default no posts.
 
    const posts = [{
+    _id: '1',
      title: 'This title',
      content: 'All the content you can think about is here to be entertaining and useful' +
      ' in equal degree so that you can bla bla bla bla bla bla bla bal here to be entertaining and useful' +
@@ -72,6 +77,7 @@ const Main = function(){
    },
 
     {
+      _id: '2',
       title: 'This second title',
      content: 'All the secondary content you can think about is here to be entertaining and useful' +
      ' in equal degree so that you can bla bla bla bla bla bla bla bal here to be entertaining and useful' +
