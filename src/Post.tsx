@@ -1,18 +1,29 @@
 import Button from "@mui/material/Button";
+import Box from '@mui/material/Box';
 import Card  from "@mui/material/Card";
+import Container from '@mui/material/Container'
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
+import Popover from '@mui/material/Popover';
+import Stack from '@mui/material/Stack';
 import TextField  from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useIndexData } from "./helpers/hooks";
 import { CommentInterface } from "./helpers/types";
 import { extractPostById } from "./helpers/utils";
+
+
 
 
 interface FormDialogProps {
@@ -21,6 +32,7 @@ interface FormDialogProps {
   handleSubmit: () => void
   inputLabel: string,
   inputText: string,
+  content?: string,
   submitLabel?: string,
 
 }
@@ -58,6 +70,7 @@ const FormDialog = function(props: FormDialogProps){
                 type="text"
                 fullWidth
                 variant="standard"
+                value={props.content || ""} 
                 />
               </form>
             )}
@@ -74,38 +87,85 @@ const FormDialog = function(props: FormDialogProps){
 
 const Comment = function(props: CommentInterface){ //to flesh out.
 
-    const addComment = async function(event: React.FormEvent<HTMLFormElement>){
-        event.preventDefault();
-        const id = props._id;
-        const data = new FormData(event.currentTarget);
-        data.append('_id', id);
-        await fetch()
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+  
+  const addComment = async function(event: React.FormEvent<HTMLFormElement>){
+    event.preventDefault();
+    const id = props._id;
+    const data = new FormData(event.currentTarget);
+    data.append('_id', id);
+    await fetch()
+
+};
+
+const updateComment = async function(event: React.FormEvent<HTMLFormElement>){
+    event.preventDefault();
+    const id = props._id
+    const data = new FormData(event.currentTarget);
+    data.append('_id', id);
+    await fetch()
 
 
+};
 
-    };
+const deleteComment = function(){
 
-    const updateComment = async function(event: React.FormEvent<HTMLFormElement>){
-        event.preventDefault();
-        const id = props._id
-        const data = new FormData(event.currentTarget);
-        data.append('_id', id);
-        await fetch()
+};
 
 
-    };
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    const deleteComment = function(){
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-    };
+  const open = Boolean(anchorEl);
 
-    return (
-        <Card>
-            <Typography>
-                {props.content}
-            </Typography>
-        </Card>
-    )
+  return (
+    <div>
+      <Container>
+      <Paper sx={{p:1}}>
+      <Grid container spacing={6}>
+      <Grid item>
+      <Typography>Accordion 1</Typography>
+      </Grid>
+      <Grid item>
+      <Typography>02/12/2019</Typography>
+      </Grid>
+      <Grid item sx={{ml:'auto'}}>
+        <Button onClick={handleClick}>
+        <MoreHorizIcon/>
+        </Button>
+        <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Stack sx={{p:1}}>
+       <Box sx={{display: 'flex', gap: '5px'}}>
+       <EditIcon />
+       <Typography>Edit comment</Typography>
+       </Box>
+       <DeleteIcon />
+       </Stack>
+      </Popover>
+      </Grid>
+      </Grid>
+      <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            malesuada lacus ex, sit amet blandit leo lobortis eget.
+      </Typography>  
+      </Paper>
+      </Container>
+    </div>
+  );    
 };
 
 const Post = function Post(){
@@ -123,3 +183,8 @@ const Post = function Post(){
 };
 
 export default Post
+
+
+
+
+ 
