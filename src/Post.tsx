@@ -14,6 +14,7 @@ import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
 import TextField  from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -22,9 +23,7 @@ import { useParams } from "react-router-dom";
 import { useIndexData } from "./helpers/hooks";
 import { CommentInterface } from "./helpers/types";
 import { extractPostById } from "./helpers/utils";
-
-
-
+import * as React from 'react'; //to remove
 
 interface FormDialogProps {
   buttonLabel: string,
@@ -126,46 +125,99 @@ const deleteComment = function(){
 
   return (
     <div>
-      <Container>
-      <Paper sx={{p:1}}>
-      <Grid container spacing={6}>
+   <Container>
+   <Stack spacing={2}>
+     <Grid container spacing={6} sx={{p:2}}>
       <Grid item>
-      <Typography>Accordion 1</Typography>
-      </Grid>
-      <Grid item>
-      <Typography>02/12/2019</Typography>
-      </Grid>
-      <Grid item sx={{ml:'auto'}}>
-        <Button onClick={handleClick}>
-        <MoreHorizIcon/>
-        </Button>
-        <Popover
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        <Stack sx={{p:1}}>
-       <Box sx={{display: 'flex', gap: '5px'}}>
-       <EditIcon />
-       <Typography>Edit comment</Typography>
-       </Box>
-       <DeleteIcon />
-       </Stack>
-      </Popover>
+     <Typography>User + Avatar</Typography>
+     </Grid>
+     <Grid item sx={{ml: 'auto'}}>
+     <Button variant='contained' endIcon={<AddCircleIcon />}>Add Comment</Button>
       </Grid>
       </Grid>
-      <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-      </Typography>  
-      </Paper>
-      </Container>
-    </div>
-  );    
+      <Paper sx={{p:2}} variant='outlined'>
+        <Grid container spacing={6}>
+        <Grid item>
+        <Typography>User + Avatar</Typography>
+        </Grid>
+        <Grid item>
+        <Typography>02/12/2019</Typography>
+        </Grid>
+        <Grid item sx={{ml:'auto'}}>
+          <Button onClick={handleClick}>
+          <MoreHorizIcon/>
+          </Button>
+          <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <Stack sx={{p:1}}>
+         <Box sx={{display: 'flex', gap: '5px', py: '0.5rem'}}>
+         <EditIcon />
+         <Typography>Edit comment</Typography>
+         </Box>
+         <Box sx={{display: 'flex', gap: '5px', py: '0.5rem'}}>
+         <DeleteIcon />
+         <Typography>Delete comment</Typography>
+         </Box>
+         </Stack>
+        </Popover>
+        </Grid>
+        </Grid>
+        <Typography>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+              malesuada lacus ex, sit amet blandit leo lobortis eget.
+        </Typography>  
+        </Paper>
+        <Paper sx={{p:2}} variant='outlined'>
+        <Grid container spacing={6}>
+        <Grid item>
+        <Typography>User + Avatar</Typography>
+        </Grid>
+        <Grid item>
+        <Typography>02/12/2019</Typography>
+        </Grid>
+        <Grid item sx={{ml:'auto'}}>
+          <Button onClick={handleClick}>
+          <MoreHorizIcon/>
+          </Button>
+          <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <Stack sx={{p:1}}>
+         <Box sx={{display: 'flex', gap: '5px', py: '0.5rem'}}>
+         <EditIcon />
+         <Typography>Edit comment</Typography>
+         </Box>
+         <Box sx={{display: 'flex', gap: '5px', py: '0.5rem'}}>
+         <DeleteIcon />
+         <Typography>Delete comment</Typography>
+         </Box>
+         </Stack>
+        </Popover>
+        </Grid>
+        </Grid>
+        <Typography>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+              malesuada lacus ex, sit amet blandit leo lobortis eget.
+        </Typography>  
+        </Paper>
+        </Stack>
+        </Container>
+        
+      </div>
+    );   
 };
 
 const Post = function Post(){
