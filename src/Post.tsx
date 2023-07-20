@@ -1,3 +1,4 @@
+import Avatar from '@mui/material/Avatar'
 import Button from "@mui/material/Button";
 import Box from '@mui/material/Box';
 import Card  from "@mui/material/Card";
@@ -7,7 +8,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Divider from "@mui/material/Divider";
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Popover from '@mui/material/Popover';
@@ -125,100 +125,69 @@ const deleteComment = function(){
 
   return (
     <div>
-   <Container>
-   <Stack spacing={2}>
-     <Grid container spacing={6} sx={{p:2}}>
+ <Container>
+ <Stack spacing={2}>
+   <Grid container spacing={2} sx={{p:2, borderBottom: '1px solid', minWidth:'fit-content'}} wrap='nowrap'>
+    <Grid item>
+   <Avatar sx={{bgcolor:'#1976d2', width: '30px', height:'30px'}}>U</Avatar>
+   </Grid>
+   <Grid item sx={{flexGrow: '1'}}>
+   <Typography>User </Typography>
+   </Grid>
+   <Grid item>
+   <Button size='small' variant='contained' endIcon={<AddCircleIcon />} sx={{display: {xs:'inline-flex',sm: 'none'}}}>Add</Button>
+   <Button size='small' variant='contained' endIcon={<AddCircleIcon />} sx={{display: {xs: 'none', sm:'inline-flex'}}}>Add Comment</Button>
+   </Grid>
+    </Grid>
+    <Box sx={{display: 'flex'}}>
+    <Paper sx={{p:2}} variant='outlined'>
+      <Grid container spacing={6} wrap='nowrap'>
+      <Grid item> 
+      <Typography variant='overline'>User:</Typography>
+      </Grid>
       <Grid item>
-     <Typography>User + Avatar</Typography>
-     </Grid>
-     <Grid item sx={{ml: 'auto'}}>
-     <Button variant='contained' endIcon={<AddCircleIcon />}>Add Comment</Button>
+      <Typography>02/12/2019</Typography>
       </Grid>
-      </Grid>
-      <Paper sx={{p:2}} variant='outlined'>
-        <Grid container spacing={6}>
-        <Grid item>
-        <Typography>User + Avatar</Typography>
-        </Grid>
-        <Grid item>
-        <Typography>02/12/2019</Typography>
-        </Grid>
-        <Grid item sx={{ml:'auto'}}>
-          <Button onClick={handleClick}>
-          <MoreHorizIcon/>
-          </Button>
-          <Popover
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-        >
-          <Stack sx={{p:1}}>
-         <Box sx={{display: 'flex', gap: '5px', py: '0.5rem'}}>
-         <EditIcon />
-         <Typography>Edit comment</Typography>
-         </Box>
-         <Box sx={{display: 'flex', gap: '5px', py: '0.5rem'}}>
-         <DeleteIcon />
-         <Typography>Delete comment</Typography>
-         </Box>
-         </Stack>
-        </Popover>
-        </Grid>
-        </Grid>
-        <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-              malesuada lacus ex, sit amet blandit leo lobortis eget.
-        </Typography>  
-        </Paper>
-        <Paper sx={{p:2}} variant='outlined'>
-        <Grid container spacing={6}>
-        <Grid item>
-        <Typography>User + Avatar</Typography>
-        </Grid>
-        <Grid item>
-        <Typography>02/12/2019</Typography>
-        </Grid>
-        <Grid item sx={{ml:'auto'}}>
-          <Button onClick={handleClick}>
-          <MoreHorizIcon/>
-          </Button>
-          <Popover
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-        >
-          <Stack sx={{p:1}}>
-         <Box sx={{display: 'flex', gap: '5px', py: '0.5rem'}}>
-         <EditIcon />
-         <Typography>Edit comment</Typography>
-         </Box>
-         <Box sx={{display: 'flex', gap: '5px', py: '0.5rem'}}>
-         <DeleteIcon />
-         <Typography>Delete comment</Typography>
-         </Box>
-         </Stack>
-        </Popover>
-        </Grid>
-        </Grid>
-        <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-              malesuada lacus ex, sit amet blandit leo lobortis eget.
-        </Typography>  
-        </Paper>
-        </Stack>
-        </Container>
+      <Grid item sx={{ml:'auto'}}>
+        <Button onClick={handleClick}>
+        <MoreHorizIcon  />
+        </Button>
+        <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 10,
+          horizontal: 130,
+        }}
+
+        sx={{
+          cursor: 'pointer'
+        }}
         
-      </div>
-    );   
-};
+        >
+       <Stack sx={{p:1}}>
+       <Button size='small' variant='text' startIcon={<EditIcon />} sx={{mr:'auto'}}>Edit comment</Button>
+       <Button size='small' variant='text' startIcon={<DeleteIcon />} sx={{mr: 'auto'}}>Delete comment</Button>       
+       </Stack>
+      </Popover>
+      </Grid>
+      </Grid>
+      <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            malesuada lacus ex, sit amet blandit leo lobortis eget.
+      </Typography>  
+      </Paper>
+      </Box>
+      </Stack>
+      </Container>      
+    </div>
+  );   
+}; 
 
 const Post = function Post(){
     const { postId }  = useParams();
@@ -235,8 +204,3 @@ const Post = function Post(){
 };
 
 export default Post
-
-
-
-
- 
