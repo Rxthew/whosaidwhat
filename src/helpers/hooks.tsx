@@ -61,7 +61,7 @@ export const useFetchIndexData = function(){
             return response.ok ?  setFreshIndexData(await response.json()) : false
         };
 
-        checkData() || fetchData()
+        checkData() && fetchData()
 
         //return statement to clean up
 
