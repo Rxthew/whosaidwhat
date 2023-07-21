@@ -1,10 +1,22 @@
+
 export interface CommentInterface {
     _id: string,
     content: string,
     date: string,
-    user?: Record<'username', string | UserInterface>
+    user?: UserInterface
     
 }
+
+export interface FormDialogProps {
+    button: (clickHandler: () => void) => JSX.Element
+    delete: boolean,
+    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+    inputLabel: string,
+    inputText: string,
+    content?: string,
+    submitLabel?: string,
+  
+  }
 
 type CommentsType = ReadonlyArray<CommentInterface>
 
@@ -13,7 +25,7 @@ interface PostInterface {
     title: string,
     content: string,
     published_status: boolean,
-    user: string | UserInterface,
+    user: UserInterface,
     comments: CommentsType
 }
 
