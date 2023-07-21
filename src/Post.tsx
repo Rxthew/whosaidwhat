@@ -1,7 +1,6 @@
 import Avatar from '@mui/material/Avatar'
 import Button from "@mui/material/Button";
 import Box from '@mui/material/Box';
-import Card  from "@mui/material/Card";
 import Container from '@mui/material/Container'
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -14,31 +13,17 @@ import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
 import TextField  from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { useState } from "react";
+import * as React from 'react'; 
 import { useParams } from "react-router-dom";
 import { useIndexData } from "./helpers/hooks";
-import { CommentInterface } from "./helpers/types";
-import { extractPostById } from "./helpers/utils";
-import * as React from 'react'; //to remove
+import { CommentInterface, FormDialogProps } from "./helpers/types";
+import { extractPostById, produceCommentFormProps } from "./helpers/utils";
 
-interface FormDialogProps {
-  buttonLabel: string,
-  delete: boolean,
-  handleSubmit: () => void
-  inputLabel: string,
-  inputText: string,
-  content?: string,
-  submitLabel?: string,
-
-}
 
 const FormDialog = function(props: FormDialogProps){
-    const [open, setOpen] = useState(false);
-  
+    const [open, setOpen] = React.useState(false);
+    
     const handleClickOpen = () => {
       setOpen(true);
     };
@@ -46,12 +31,14 @@ const FormDialog = function(props: FormDialogProps){
     const handleClose = () => {
       setOpen(false);
     };
+
+    const FormButton = function(){
+      return props.button(handleClickOpen)
+    };
   
     return (
       <div>
-        <Button variant="outlined" onClick={handleClickOpen}>
-          {props.buttonLabel}
-        </Button>
+        <FormButton />
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>{props.inputLabel}</DialogTitle>
           <DialogContent>
@@ -76,42 +63,23 @@ const FormDialog = function(props: FormDialogProps){
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit" form="dialogForm" onClick={props.handleSubmit}>{props.submitLabel ? props.submitLabel : "Submit"}</Button>
+            <Button type="submit" form="dialogForm">{props.submitLabel ? props.submitLabel : "Submit"}</Button>
           </DialogActions>
         </Dialog>
       </div>
     );
   }
+
+  const {
+         addCommentProps, 
+         deleteCommentProps,
+         editCommentProps
+        } = produceCommentFormProps();  
  
 
-const Comment = function(props: CommentInterface){ //to flesh out.
+const Comment = function(props: CommentInterface){ 
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-
-  
-  const addComment = async function(event: React.FormEvent<HTMLFormElement>){
-    event.preventDefault();
-    const id = props._id;
-    const data = new FormData(event.currentTarget);
-    data.append('_id', id);
-    await fetch()
-
-};
-
-const updateComment = async function(event: React.FormEvent<HTMLFormElement>){
-    event.preventDefault();
-    const id = props._id
-    const data = new FormData(event.currentTarget);
-    data.append('_id', id);
-    await fetch()
-
-
-};
-
-const deleteComment = function(){
-
-};
-
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -124,69 +92,65 @@ const deleteComment = function(){
   const open = Boolean(anchorEl);
 
   return (
-    <div>
- <Container>
- <Stack spacing={2}>
-   <Grid container spacing={2} sx={{p:2, borderBottom: '1px solid', minWidth:'fit-content'}} wrap='nowrap'>
-    <Grid item>
-   <Avatar sx={{bgcolor:'#1976d2', width: '30px', height:'30px'}}>U</Avatar>
-   </Grid>
-   <Grid item sx={{flexGrow: '1'}}>
-   <Typography>User </Typography>
-   </Grid>
-   <Grid item>
-   <Button size='small' variant='contained' endIcon={<AddCircleIcon />} sx={{display: {xs:'inline-flex',sm: 'none'}}}>Add</Button>
-   <Button size='small' variant='contained' endIcon={<AddCircleIcon />} sx={{display: {xs: 'none', sm:'inline-flex'}}}>Add Comment</Button>
-   </Grid>
-    </Grid>
-    <Box sx={{display: 'flex'}}>
-    <Paper sx={{p:2}} variant='outlined'>
-      <Grid container spacing={6} wrap='nowrap'>
-      <Grid item> 
-      <Typography variant='overline'>User:</Typography>
-      </Grid>
-      <Grid item>
-      <Typography>02/12/2019</Typography>
-      </Grid>
-      <Grid item sx={{ml:'auto'}}>
-        <Button onClick={handleClick}>
-        <MoreHorizIcon  />
-        </Button>
-        <Popover
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 10,
-          horizontal: 130,
-        }}
-
-        sx={{
-          cursor: 'pointer'
-        }}
-        
-        >
-       <Stack sx={{p:1}}>
-       <Button size='small' variant='text' startIcon={<EditIcon />} sx={{mr:'auto'}}>Edit comment</Button>
-       <Button size='small' variant='text' startIcon={<DeleteIcon />} sx={{mr: 'auto'}}>Delete comment</Button>       
-       </Stack>
-      </Popover>
-      </Grid>
-      </Grid>
-      <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-      </Typography>  
-      </Paper>
-      </Box>
+  <div>
+    <Container>
+      <Stack spacing={2}>
+        <Grid container spacing={2} sx={{p:2, borderBottom: '1px solid', minWidth:'fit-content'}} wrap='nowrap'>
+          <Grid item>
+            <Avatar sx={{bgcolor:'#1976d2', width: '30px', height:'30px'}}>U</Avatar>
+          </Grid>
+          <Grid item sx={{flexGrow: '1'}}>
+            <Typography>User </Typography>
+          </Grid>
+          <Grid item>
+            <FormDialog {...addCommentProps(props._id)}/>
+          </Grid>
+        </Grid>
+        <Box sx={{display: 'flex'}}>
+          <Paper sx={{p:2}} variant='outlined'>
+            <Grid container spacing={6} wrap='nowrap'>
+              <Grid item> 
+                <Typography variant='overline'>{props.user?.username || 'Anonymous'}:</Typography>      
+              </Grid>
+              <Grid item>
+                <Typography>02/12/2019</Typography>
+              </Grid>
+              <Grid item sx={{ml:'auto'}}>
+                <Button onClick={handleClick}>
+                  <MoreHorizIcon  />
+                </Button>
+                <Popover
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+                }}
+                transformOrigin={{
+                vertical: 10,
+                horizontal: 130,
+                }}
+                sx={{
+                cursor: 'pointer'
+                }}
+              >
+                  <Stack sx={{p:1}}>
+                    <FormDialog {...editCommentProps(props._id, props.content)} />
+                    <FormDialog {...deleteCommentProps(props._id)} />      
+                  </Stack>
+                </Popover>
+            </Grid>
+            </Grid>
+            <Typography>
+                  {props.content}
+            </Typography>  
+          </Paper>
+        </Box>
       </Stack>
-      </Container>      
-    </div>
-  );   
+    </Container>      
+  </div>
+  );   // /Box at the end is the end of a single comment so that's where you loop with keys.
 }; 
 
 const Post = function Post(){
