@@ -24,6 +24,7 @@ interface PostInterface {
     _id: string,
     title: string,
     content: string,
+    date: string,
     published_status: boolean,
     user: UserInterface,
     comments: CommentsType
