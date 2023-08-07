@@ -17,7 +17,7 @@ import {  checkReferred, settleErrors } from './helpers/services';
    const [errors,setErrors] = useErrorStates(['username', 'password']);
 
     const loginFetcher = async function(data:FormData){
-      const response = await fetch("update this url when ready", { //Update url when ready.
+      const response = await fetch("http://localhost:3000/login", { //Update url when ready.
         body: data,
         headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
         method: 'POST', 

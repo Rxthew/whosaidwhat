@@ -17,7 +17,7 @@ const Signup = function Signup(){
   const [errors,setErrors] = useErrorStates(['first_name', 'last_name', 'username', 'password', 'privilege_code', 'admin_code']);
 
   const signUpFetcher = async function(data:FormData){
-    const response = await fetch("update this url when ready", { //Update url when ready.
+    const response = await fetch("http://localhost:3000/signup", { //Update url when ready.
       body: data,
       headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
       method: 'POST', 
