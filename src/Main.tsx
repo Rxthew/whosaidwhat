@@ -9,12 +9,15 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Link as PostLink } from 'react-router-dom';
+import { useIndexData } from './helpers/hooks';
+import { CommentsType } from './helpers/types';
 
 
 interface postPreviewProps {
   post: {
     _id: string,
     date: string,
+    comments: CommentsType,
     content: string,
     title: string
   };
@@ -24,7 +27,7 @@ interface postPreviewProps {
 const PostPreview = function PostPreview(props: postPreviewProps) {
   const { post } = props;
 
-  const commentsCount = 1 //change to post.comments.length - 1;
+  const commentsCount = post.comments.length - 1;
 
   const truncatePostContent = function truncatePostContent(content:string){
     return content.substring(0,350) + '...'
@@ -64,41 +67,27 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
 
 const Main = function(){
 
-   //default no posts.
-
-   const posts = [{
-    _id: '1',
-     title: 'This title',
-     content: 'All the content you can think about is here to be entertaining and useful' +
-     ' in equal degree so that you can bla bla bla bla bla bla bla bal here to be entertaining and useful' +
-     ' here to be entertaining and useful  here to be entertaining and useful  here to be entertaining and useful' +
-     ' here to be entertaining and useful here to be entertaining and useful here to be entertaining and useful',
-     date: new Date(Date.now()).toString()
-   },
-
-    {
-      _id: '2',
-      title: 'This second title',
-     content: 'All the secondary content you can think about is here to be entertaining and useful' +
-     ' in equal degree so that you can bla bla bla bla bla bla bla bal here to be entertaining and useful' +
-     ' here to be entertaining and useful  here to be entertaining and useful  here to be entertaining and useful' +
-     ' here to be entertaining and useful here to be entertaining and useful here to be entertaining and useful',
-     date: 'Nov 8 11'
-    }
-  ]
+   const { posts } = useIndexData()
     
-
     return (
         <>
         <CssBaseline />
         <Container maxWidth="lg" sx={{py:4}}>
           <main>
-            <Grid container spacing={4}>
-              {posts.map(
-                function convertToPreview(post){
-                  return <PostPreview key={post.title} post={post} />
-              })}
-            </Grid>
+            {
+              posts && posts.length > 0 ? (
+                <Grid container spacing={4}>
+                  {posts.map(
+                    function convertToPreview(post){
+                      return <PostPreview key={post.title} post={post} />
+                  })}
+                </Grid>
+              ) :
+              (
+                <Typography>There are no posts to show at this time.</Typography>
+              )
+            }
+            
           </main>
         </Container>
         
