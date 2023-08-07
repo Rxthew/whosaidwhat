@@ -18,7 +18,7 @@ export interface FormDialogProps {
   
   }
 
-type CommentsType = ReadonlyArray<CommentInterface>
+export type CommentsType = ReadonlyArray<CommentInterface>
 
 interface PostInterface { 
     _id: string,
