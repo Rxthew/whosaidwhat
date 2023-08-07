@@ -16,7 +16,7 @@ import { useState } from 'react'
 
 
 interface HeaderProps {
-    username: string,
+    username?: string,
 
 }
 
