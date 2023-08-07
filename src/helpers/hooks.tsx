@@ -52,18 +52,23 @@ export const useFetchIndexData = function(){
             return
         };
 
+        const abortFetch = new AbortController();
+
         const fetchData = async function(){
-            const response = await fetch("update this url when ready", { //Update url when ready.
+            const response = await fetch("http://localhost:3000/", { //Update url when ready.
                 headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
                 method: 'GET', 
                 mode: 'cors',
+                signal: abortFetch.signal
               })
             return response.ok ?  setFreshIndexData(await response.json()) : false
         };
 
         checkData() && fetchData()
 
-        //return statement to clean up
+        return () => {
+            abortFetch.abort()
+        }
 
     },[user,posts])
 
