@@ -7,6 +7,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Popover from '@mui/material/Popover';
@@ -14,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import TextField  from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { DateTime } from 'luxon';
 import * as React from 'react'; 
 import { useParams } from "react-router-dom";
 import { useIndexData } from "./helpers/hooks";
@@ -56,7 +58,8 @@ const FormDialog = function(props: FormDialogProps){
                 type="text"
                 fullWidth
                 variant="standard"
-                value={props.content || ""} 
+                value={props.content || ""}
+                sx={{whiteSpace:"pre-line"}} 
                 />
               </form>
             )}
@@ -80,6 +83,13 @@ const FormDialog = function(props: FormDialogProps){
 const Comment = function(props: CommentInterface){ 
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const { user } = useIndexData();
+
+  const isUserCommentOwner = user && props.user && user?._id === props.user?._id;
+  const isUserPrivilegedMember = user?.member_status === 'privileged';
+  const isUserPrivilegedOwner = isUserCommentOwner && isUserPrivilegedMember;
+  const isUserAdminMember = user?.member_status === 'admin'; 
+
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -92,77 +102,89 @@ const Comment = function(props: CommentInterface){
   const open = Boolean(anchorEl);
 
   return (
-  <div>
-    <Container>
-      <Stack spacing={2}>
-        <Grid container spacing={2} sx={{p:2, borderBottom: '1px solid', minWidth:'fit-content'}} wrap='nowrap'>
-          <Grid item>
-            <Avatar sx={{bgcolor:'#1976d2', width: '30px', height:'30px'}}>U</Avatar>
-          </Grid>
-          <Grid item sx={{flexGrow: '1'}}>
-            <Typography>User </Typography>
-          </Grid>
-          <Grid item>
-            <FormDialog {...addCommentProps(props._id)}/>
-          </Grid>
+  <Box sx={{display: 'flex'}}>
+    <Paper sx={{p:2}} variant='outlined'>
+      <Grid container spacing={6} wrap='nowrap'>
+        <Grid item> 
+          <Typography variant='overline'>{props.user?.username || 'Anonymous'}:</Typography>      
         </Grid>
-        <Box sx={{display: 'flex'}}>
-          <Paper sx={{p:2}} variant='outlined'>
-            <Grid container spacing={6} wrap='nowrap'>
-              <Grid item> 
-                <Typography variant='overline'>{props.user?.username || 'Anonymous'}:</Typography>      
-              </Grid>
-              <Grid item>
-                <Typography>02/12/2019</Typography>
-              </Grid>
-              <Grid item sx={{ml:'auto'}}>
-                <Button onClick={handleClick}>
-                  <MoreHorizIcon  />
-                </Button>
-                <Popover
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-                }}
-                transformOrigin={{
-                vertical: 10,
-                horizontal: 130,
-                }}
-                sx={{
-                cursor: 'pointer'
-                }}
-              >
-                  <Stack sx={{p:1}}>
-                    <FormDialog {...editCommentProps(props._id, props.content)} />
-                    <FormDialog {...deleteCommentProps(props._id)} />      
-                  </Stack>
-                </Popover>
-            </Grid>
-            </Grid>
-            <Typography>
-                  {props.content}
-            </Typography>  
-          </Paper>
-        </Box>
-      </Stack>
-    </Container>      
-  </div>
-  );   // /Box at the end is the end of a single comment so that's where you loop with keys.
+        <Grid item>
+          <Typography>{props.date}</Typography>
+        </Grid>
+        {(isUserAdminMember || isUserPrivilegedOwner) && (
+        <Grid item sx={{ml:'auto'}}>
+          <Button onClick={handleClick}>
+            <MoreHorizIcon  />
+          </Button>
+          <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+          }}
+          transformOrigin={{
+          vertical: 10,
+          horizontal: 130,
+          }}
+          sx={{
+          cursor: 'pointer'
+          }}
+        >
+            <Stack sx={{p:1}}>
+              <FormDialog {...editCommentProps(props._id, props.content)} />
+              <FormDialog {...deleteCommentProps(props._id)} />      
+            </Stack>
+          </Popover>
+        
+      </Grid>
+      )}
+      </Grid>
+      <Typography>
+            {props.content}
+      </Typography>  
+    </Paper>
+  </Box>    
+  );   
 }; 
 
 const Post = function Post(){
     const { postId }  = useParams();
     const { user, posts } = useIndexData();
     const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
-
     return (
        <>
+       <Container>
           {post ? (
-            <div>yes</div>
-          ): <div>no</div>}
+              <>
+              <Typography component='h1' variant='h4'>{post.title}</Typography>
+              <Typography variant='body2' sx={{padding: '1rem',whiteSpace: 'pre-line'}}>
+                {post.content}
+              </Typography>
+              <Divider />
+          <Container>
+            <Stack spacing={2}>
+                ({ (user?.member_status === 'privileged' || user?.member_status === 'admin') &&
+                <Grid container spacing={2} sx={{p:2, borderBottom: '1px solid', minWidth:'fit-content'}} wrap='nowrap'>
+                  <Grid item>
+                    <Avatar sx={{bgcolor:'#1976d2', width: '30px', height:'30px'}}>{user?.username[0].toUpperCase()}</Avatar>
+                  </Grid>
+                  <Grid item sx={{flexGrow: '1'}}>
+                    <Typography>User </Typography>
+                  </Grid>
+                  <Grid item>
+                    <FormDialog {...addCommentProps()}/>
+                  </Grid>
+                </Grid>})
+                {post.comments.map((comment)=>
+                  <Comment _id={comment._id} content={comment.content} date={comment.date} key={comment._id} user={comment.user} />
+                )}
+              </Stack>
+            </Container>  
+          </>
+          ): <Typography>This post is not available right now.</Typography>}
+        </Container> 
        </>
     )
 };

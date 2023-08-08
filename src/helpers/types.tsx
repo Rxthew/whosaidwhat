@@ -3,7 +3,7 @@ export interface CommentInterface {
     _id: string,
     content: string,
     date: string,
-    user?: UserInterface
+    user: UserInterface
     
 }
 
