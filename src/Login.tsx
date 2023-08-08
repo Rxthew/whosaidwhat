@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { Link as FormLink } from 'react-router-dom';
 import { useErrorStates } from './helpers/hooks';
 import {  checkReferred, settleErrors } from './helpers/services';
 
@@ -128,9 +129,9 @@ import {  checkReferred, settleErrors } from './helpers/services';
                 </Button>
                 <Grid container>
                   <Grid item>
-                    <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
+                  <Link component={FormLink} to={'/signup'}> 
+                      <Typography>Don't have an account? Sign up.</Typography>
+                  </Link>
                   </Grid>
                 </Grid>
               </Box>

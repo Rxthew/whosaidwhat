@@ -68,26 +68,30 @@ export default function Header(props:HeaderProps) {
           >
             <MenuIcon />
           </IconButton>
-            <Typography
-              component="h1"
-              variant="h2"
-              color="inherit"
-              align="left"
-              noWrap
-              sx={{display: {xs: 'none', sm:'none', md: 'block'}, flexGrow: 1 }}
-            >
-              Who Said What
-            </Typography>
-            <Typography
-              component="h1"
-              variant="h3"
-              color="inherit"
-              align="left"
-              noWrap
-              sx={{display: {xs: 'block', md: 'none'}, flexGrow: 1 }}
-            >
-              WSW
-            </Typography>
+          <Link component={HeaderLink} to={'/'} color="inherit" sx={{flexGrow: 1}}> 
+              <Typography
+                component="h1"
+                variant="h2"
+                color="inherit"
+                align="left"
+                noWrap
+                sx={{display: {xs: 'none', sm:'none', md: 'block'}}}
+              >
+                Who Said What
+              </Typography>
+            </Link>
+            <Link component={HeaderLink} to={'/'} color="inherit" sx={{flexGrow: 1}}>
+              <Typography
+                component="h1"
+                variant="h3"
+                color="inherit"
+                align="left"
+                noWrap
+                sx={{display: {xs: 'block', md: 'none'} }}
+              >
+                WSW
+              </Typography>
+            </Link>
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
               {username ? (
               <>   

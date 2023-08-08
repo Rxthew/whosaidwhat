@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { Link as FormLink } from 'react-router-dom';
 import { useErrorStates } from './helpers/hooks';
 import { checkReferred, settleErrors } from './helpers/services';
 
@@ -226,9 +227,9 @@ const Signup = function Signup(){
                 </Button>
                 <Grid container>
                   <Grid item>
-                    <Link href="#" variant="body2">
-                      {"Already have an account? Sign In"}
-                    </Link>
+                  <Link component={FormLink} to={'/login'}> 
+                      <Typography>Already have an account? Sign In</Typography>
+                  </Link>
                   </Grid>
                 </Grid>
               </Box>
