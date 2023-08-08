@@ -9,19 +9,22 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react'
+import { Link as HeaderLink } from 'react-router-dom';
+import { UserInterface } from './helpers/types';
 
 
 interface HeaderProps {
-    username?: string,
+    user?: UserInterface,
 
 }
 
 export default function Header(props:HeaderProps) {
-    const {username} = props;
+    const {username} = props.user || {username: null};
     const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -91,21 +94,29 @@ export default function Header(props:HeaderProps) {
                 <Typography>
                   Welcome {username}
                 </Typography>
-                <Button color="inherit" >
-                    Edit profile
-                </Button>
-                <Button color="inherit" >
-                    Log out
-                </Button>
+                <Link component={HeaderLink} to={`/user/${props.user?._id}`} color="inherit">
+                  <Button color="inherit" >
+                      Edit profile
+                  </Button>
+                </Link>
+                <Link component={HeaderLink} to={'/logout'} color="inherit">
+                  <Button color="inherit" >
+                      Log out
+                  </Button>
+                </Link>
               </> )
               : 
               ( <>
-                <Button color="inherit" > 
-                  Sign up
-                </Button>
-                <Button color="inherit" >
-                  Log in
-                </Button>
+                <Link component={HeaderLink} to={'/signup'} color="inherit">
+                  <Button color="inherit" > 
+                    Sign up
+                  </Button>
+                </Link>
+                <Link component={HeaderLink} to={'/login'} color="inherit">
+                  <Button color="inherit" >
+                    Log in
+                  </Button>
+                </Link>
               </> )
               }
             </Box>
