@@ -3,14 +3,16 @@ export interface CommentInterface {
     _id: string,
     content: string,
     date: string,
+    post: string,
     user: UserInterface
     
 }
 
+
 export interface FormDialogProps {
     button: (clickHandler: () => void) => JSX.Element
     delete: boolean,
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+    handleSubmitConstructor: (setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,) => (event: React.FormEvent<HTMLFormElement>) => Promise<void>
     inputLabel: string,
     inputText: string,
     content?: string,

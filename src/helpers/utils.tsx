@@ -3,6 +3,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { FormDialogProps, PostsType } from "./types";
+import React from "react";
+import { checkReferred, settleErrors } from "./services";
 
 export const extractPostById = function(id:string, posts:PostsType){
     const post = posts.find(post => post._id === id)
@@ -11,7 +13,7 @@ export const extractPostById = function(id:string, posts:PostsType){
 
 export const produceCommentFormProps = function(){
 
-    const addCommentProps = function(id: string):FormDialogProps{
+    const addCommentProps = function(post:string):FormDialogProps{
         
         const button = function(clickHandler: () => void){
             return (
@@ -24,24 +26,42 @@ export const produceCommentFormProps = function(){
                 </Button>
             </>
             )
-        };       
-
-        const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
-            event.preventDefault();
-            const _id = id
-            const data = new FormData(event.currentTarget);
-            data.append('_id', _id);
-            await fetch()
-        
         };
 
         const inputLabel = 'Add Comment';
         const inputText= 'Have your own say on this post.';
+        
+        const handleSubmitConstructor = function(setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,){
+
+            const addCommentFetcher = async function(data:FormData){
+                const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
+                  body: data,
+                  headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+                  method: 'POST', 
+                  mode: 'cors',
+                  redirect: 'follow', 
+                  referrer: window.location.href
+                })
+                return checkReferred(response) || settleErrors(response,setErrors) 
+
+            };
+
+            const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
+                event.preventDefault();
+                const data = new FormData(event.currentTarget);
+                post ? data.append('post', post) : false;
+                await addCommentFetcher(data)
+            
+            };
+
+            return handleSubmit
+
+        }
 
         return {
             button, 
             delete: false,
-            handleSubmit,
+            handleSubmitConstructor,
             inputLabel,
             inputText
         }
@@ -54,56 +74,96 @@ export const produceCommentFormProps = function(){
             return <Button size='small' variant='text' startIcon={<DeleteIcon />} sx={{mr: 'auto'}} onClick={clickHandler}>Delete comment</Button>  
         };
 
-        const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
-            event.preventDefault();
-            const _id = id
-            const data = new FormData();
-            data.append('_id', _id);
-            await fetch()
-        
-        };
-
         const inputLabel = 'Delete Comment';
         const inputText= 'Be absolutely sure you want to delete this comment. Once deleted, it shall be impossible to retrieve.';
         const submitLabel = 'Delete'
 
+        const handleSubmitConstructor = function(setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,){
 
-        return {
+            const deleteCommentFetcher = async function(data:FormData){
+                const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
+                  body: data,
+                  headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+                  method: 'DELETE', 
+                  mode: 'cors',
+                  redirect: 'follow', 
+                  referrer: window.location.href
+                })
+                return settleErrors(response,setErrors)  
+            }
+
+            const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
+                event.preventDefault();
+                const _id = id
+                const data = new FormData();
+                data.append('_id', _id);
+                await deleteCommentFetcher(data);
+                return
+            
+            };
+
+            return handleSubmit
+            
+        };
+
+        return  {
             button, 
             delete: true,
-            handleSubmit,
+            handleSubmitConstructor,
             inputLabel,
             inputText,
             submitLabel
         }
-
+        
 
     };
 
-    const editCommentProps = function(id: string, content: string){
+    const editCommentProps = function(modifyingKeys:Record<'id' | 'content' | 'post', string>){
+
+        const {content, id, post} = modifyingKeys;
 
         const button = function(clickHandler: () => void){
             return <Button size='small' variant='text' startIcon={<EditIcon />} sx={{mr:'auto'}} onClick={clickHandler}>Edit comment</Button>
         };
 
-        const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
-            event.preventDefault();
-            const _id = id
-            const data = new FormData(event.currentTarget);
-            data.append('_id', _id);
-            await fetch()
-        
-        };
-
         const inputLabel = 'Edit Comment';
         const inputText= 'Edit your comment in the field below.';
+
+        const handleSubmitConstructor = function(setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,){
+
+            const editCommentFetcher = async function(data:FormData){
+                const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
+                  body: data,
+                  headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+                  method: 'POST', 
+                  mode: 'cors',
+                  redirect: 'follow', 
+                  referrer: window.location.href
+                })
+                return checkReferred(response) || settleErrors(response,setErrors) 
+
+            };
+
+            const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
+                event.preventDefault();
+                const data = new FormData(event.currentTarget);
+                const _id = id
+                data.append('_id', _id);
+                data.append('post', post);
+                await editCommentFetcher(data)
+            
+            };
+
+            return handleSubmit
+
+        }
 
 
         return {
             button,
             content, 
             delete: false,
-            handleSubmit,
+            handleSubmitConstructor,
             inputLabel,
             inputText,
         }
