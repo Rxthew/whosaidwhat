@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Blog from './Blog'
+import Error from './Error'
 import Main from './Main'
 import Login from './Login'
 import User from './User'
@@ -12,6 +13,7 @@ import Post from './Post'
 const blogRouter = createBrowserRouter([{
   path: '/',
   element: <Blog />,
+  errorElement: <Error />,
   children: [
     {
       index: true,
@@ -27,11 +29,11 @@ const blogRouter = createBrowserRouter([{
     },
     {
       path: '/post/*',
-      element: <Post /> //useContext probably or localstorage
+      element: <Post /> 
     },
     {
       path: '/user/*',
-      element: <User /> //same as above.
+      element: <User /> 
     }
 
   ]
