@@ -18,13 +18,15 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { DateTime } from 'luxon';
 import * as React from 'react'; 
 import { useParams } from "react-router-dom";
-import { useIndexData } from "./helpers/hooks";
+import { useErrorStates, useIndexData } from "./helpers/hooks";
 import { CommentInterface, FormDialogProps } from "./helpers/types";
 import { extractPostById, produceCommentFormProps } from "./helpers/utils";
 
 
 const FormDialog = function(props: FormDialogProps){
     const [open, setOpen] = React.useState(false);
+    const [errors, setErrors] = useErrorStates(['_id', 'content', 'user', 'post']);
+
     
     const handleClickOpen = () => {
       setOpen(true);
@@ -34,6 +36,8 @@ const FormDialog = function(props: FormDialogProps){
       setOpen(false);
     };
 
+    const handleSubmit = props.handleSubmitConstructor(setErrors);
+
     const FormButton = function(){
       return props.button(handleClickOpen)
     };
@@ -41,6 +45,16 @@ const FormDialog = function(props: FormDialogProps){
     return (
       <div>
         <FormButton />
+        {errors.general.error && (
+        <Typography component="h2" variant="h6" sx={{color: "red"}}>
+        Error: {errors.general.msg}
+        </Typography>
+        )}
+        {errors.content.error && (
+        <Typography component="h2" variant="h6" sx={{color: "red"}}>
+        Error: {errors.content.msg}
+        </Typography>
+        )}
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>{props.inputLabel}</DialogTitle>
           <DialogContent>
@@ -48,10 +62,11 @@ const FormDialog = function(props: FormDialogProps){
               {props.inputText}
             </DialogContentText>
             {props.delete || (
-              <form id="dialogForm" onSubmit={props.handleSubmit}>
+              <form id="dialogForm" onSubmit={handleSubmit}>
                 <TextField 
                 autoFocus
                 margin="dense"
+                multiline
                 id="content"
                 name="content"
                 label="content"
@@ -84,7 +99,7 @@ const Comment = function(props: CommentInterface){
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const { user } = useIndexData();
-
+  
   const isUserCommentOwner = user && props.user && user?._id === props.user?._id;
   const isUserPrivilegedMember = user?.member_status === 'privileged';
   const isUserPrivilegedOwner = isUserCommentOwner && isUserPrivilegedMember;
@@ -133,7 +148,7 @@ const Comment = function(props: CommentInterface){
           }}
         >
             <Stack sx={{p:1}}>
-              <FormDialog {...editCommentProps(props._id, props.content)} />
+              <FormDialog {...editCommentProps({content: props.content, id: props._id, post: props.post})} />
               <FormDialog {...deleteCommentProps(props._id)} />      
             </Stack>
           </Popover>
@@ -159,7 +174,7 @@ const Post = function Post(){
           {post ? (
               <>
               <Typography component='h1' variant='h4'>{post.title}</Typography>
-              <Typography variant='body2' sx={{padding: '1rem',whiteSpace: 'pre-line'}}>
+              <Typography variant='body2' sx={{padding: '1rem', whiteSpace: 'pre-line'}}>
                 {post.content}
               </Typography>
               <Divider />
@@ -174,11 +189,11 @@ const Post = function Post(){
                     <Typography>User </Typography>
                   </Grid>
                   <Grid item>
-                    <FormDialog {...addCommentProps()}/>
+                    <FormDialog {...addCommentProps(postId as string)}/>
                   </Grid>
                 </Grid>})
                 {post.comments.map((comment)=>
-                  <Comment _id={comment._id} content={comment.content} date={comment.date} key={comment._id} user={comment.user} />
+                  <Comment _id={comment._id} content={comment.content} date={comment.date} key={comment._id} post={postId as string} user={comment.user} />
                 )}
               </Stack>
             </Container>  
