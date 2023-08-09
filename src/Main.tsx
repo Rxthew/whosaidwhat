@@ -84,7 +84,7 @@ const Main = function(){
                 </Grid>
               ) :
               (
-                <Typography>There are no posts to show at this time.</Typography>
+                <Typography  align='center' component='h2' variant='h5'>There are no posts to show at this time.</Typography>
               )
             }
             
