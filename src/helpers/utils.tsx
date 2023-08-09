@@ -226,7 +226,7 @@ export const restoreOriginalErrorState = function(errorsSetter: React.Dispatch<R
     const restorer = function(errors:Record<string,Record<string, string | boolean>>){
         const parameters = Object.keys(errors);
         const defaultErrorsCollection = produceDefaultErrorPairs(parameters);
-        const defaultErrorsState = Object.assign({},...defaultErrorsCollection)
+        const defaultErrorsState = Object.fromEntries(defaultErrorsCollection);
         return defaultErrorsState
     }
     errorsSetter(restorer)
