@@ -15,11 +15,11 @@ const User = function User(){
   const [errors,setErrors] = useErrorStates(['first_name', 'last_name', 'username', 'password', 'privilege_code', 'admin_code']);
   const { user } = useIndexData();
 
-  const updateUserFetcher = async function(data:FormData){
+  const updateUserFetcher = async function(data:string){
        const userId = user?._id;
        const response = await fetch(`localhost:3000/${userId}`, {  //Update url when ready.
         body: data,
-        headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+        headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
         method: 'PUT', 
         mode: 'cors',
         redirect: 'follow', 
@@ -30,7 +30,8 @@ const User = function User(){
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        const rawData = new FormData(event.currentTarget);
+        const data = JSON.stringify(Object.fromEntries(rawData.entries()));
         await updateUserFetcher(data);
 
         

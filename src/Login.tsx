@@ -17,10 +17,10 @@ import {  checkReferred, settleErrors } from './helpers/services';
 
    const [errors,setErrors] = useErrorStates(['username', 'password']);
 
-    const loginFetcher = async function(data:FormData){
+    const loginFetcher = async function(data:string){
       const response = await fetch("http://localhost:3000/login", { //Update url when ready.
         body: data,
-        headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+        headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
         method: 'POST', 
         mode: 'cors',
         redirect: 'follow', 
@@ -31,7 +31,8 @@ import {  checkReferred, settleErrors } from './helpers/services';
 
     const handleSubmit = async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        const rawData = new FormData(event.currentTarget);
+        const data = JSON.stringify(Object.fromEntries(rawData.entries()));
         await loginFetcher(data);
     };
 

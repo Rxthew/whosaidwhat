@@ -33,10 +33,10 @@ export const produceCommentFormProps = function(){
         
         const handleSubmitConstructor = function(setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,){
 
-            const addCommentFetcher = async function(data:FormData){
+            const addCommentFetcher = async function(data:string){
                 const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
                   body: data,
-                  headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+                  headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
                   method: 'POST', 
                   mode: 'cors',
                   redirect: 'follow', 
@@ -48,8 +48,9 @@ export const produceCommentFormProps = function(){
 
             const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
                 event.preventDefault();
-                const data = new FormData(event.currentTarget);
-                post ? data.append('post', post) : false;
+                const rawData = new FormData(event.currentTarget);
+                post ? rawData.append('post', post) : false;
+                const data = JSON.stringify(Object.fromEntries(rawData.entries()));
                 await addCommentFetcher(data)
             
             };
@@ -80,10 +81,10 @@ export const produceCommentFormProps = function(){
 
         const handleSubmitConstructor = function(setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,){
 
-            const deleteCommentFetcher = async function(data:FormData){
+            const deleteCommentFetcher = async function(data:string){
                 const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
                   body: data,
-                  headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+                  headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
                   method: 'DELETE', 
                   mode: 'cors',
                   redirect: 'follow', 
@@ -95,8 +96,9 @@ export const produceCommentFormProps = function(){
             const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
                 event.preventDefault();
                 const _id = id
-                const data = new FormData();
-                data.append('_id', _id);
+                const rawData = new FormData();
+                rawData.append('_id', _id);
+                const data = JSON.stringify(Object.fromEntries(rawData.entries()));
                 await deleteCommentFetcher(data);
                 return
             
@@ -131,10 +133,10 @@ export const produceCommentFormProps = function(){
 
         const handleSubmitConstructor = function(setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,){
 
-            const editCommentFetcher = async function(data:FormData){
+            const editCommentFetcher = async function(data:string){
                 const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
                   body: data,
-                  headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+                  headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
                   method: 'POST', 
                   mode: 'cors',
                   redirect: 'follow', 
@@ -146,10 +148,11 @@ export const produceCommentFormProps = function(){
 
             const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
                 event.preventDefault();
-                const data = new FormData(event.currentTarget);
+                const rawData = new FormData(event.currentTarget);
                 const _id = id
-                data.append('_id', _id);
-                data.append('post', post);
+                rawData.append('_id', _id);
+                rawData.append('post', post);
+                const data = JSON.stringify(Object.fromEntries(rawData.entries()));
                 await editCommentFetcher(data)
             
             };

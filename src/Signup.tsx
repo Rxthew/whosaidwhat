@@ -17,10 +17,10 @@ const Signup = function Signup(){
 
   const [errors,setErrors] = useErrorStates(['first_name', 'last_name', 'username', 'password', 'privilege_code', 'admin_code']);
 
-  const signUpFetcher = async function(data:FormData){
+  const signUpFetcher = async function(data:string){
     const response = await fetch("http://localhost:3000/signup", { //Update url when ready.
-      body: data,
-      headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+      body: data, 
+      headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
       method: 'POST', 
       mode: 'cors',
       redirect: 'follow', 
@@ -31,7 +31,8 @@ const Signup = function Signup(){
       
     const handleSubmit = async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        const rawData = new FormData(event.currentTarget);
+        const data = JSON.stringify(Object.fromEntries(rawData.entries()));
         await signUpFetcher(data)
       };
     
@@ -81,7 +82,7 @@ const Signup = function Signup(){
                         fullWidth
                         id="first_name"
                         label="First Name"
-                        autoFocus
+                        autoFocus                       
                         />
                       )}
                     </Grid>
