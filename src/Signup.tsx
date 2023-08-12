@@ -9,13 +9,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as FormLink } from 'react-router-dom';
-import { useErrorStates } from './helpers/hooks';
-import { checkReferred, settleErrors } from './helpers/services';
+import { useErrorStates, useIndexData } from './helpers/hooks';
+import { settleErrors } from './helpers/services';
 
  
 const Signup = function Signup(){
 
   const [errors,setErrors] = useErrorStates(['first_name', 'last_name', 'username', 'password', 'privilege_code', 'admin_code']);
+  const { resetIndexData } = useIndexData();
 
   const signUpFetcher = async function(data:string){
     const response = await fetch("http://localhost:3000/signup", { //Update url when ready.
@@ -27,7 +28,8 @@ const Signup = function Signup(){
       redirect: 'follow', 
       referrer: window.location.href
     })
-    return checkReferred(response) || settleErrors(response,setErrors)  
+    const errorStatus = await settleErrors(response,setErrors)
+    return errorStatus && resetIndexData()
     }
       
     const handleSubmit = async function handleSubmit(event: React.FormEvent<HTMLFormElement>){

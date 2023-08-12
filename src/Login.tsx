@@ -10,12 +10,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as FormLink } from 'react-router-dom';
-import { useErrorStates } from './helpers/hooks';
-import {  checkReferred, settleErrors } from './helpers/services';
+import { useErrorStates, useIndexData } from './helpers/hooks';
+import {  settleErrors } from './helpers/services';
 
  const Login = function Login(){
 
    const [errors,setErrors] = useErrorStates(['username', 'password']);
+   const { resetIndexData } = useIndexData();
 
     const loginFetcher = async function(data:string){
       const response = await fetch("http://localhost:3000/login", { //Update url when ready.
@@ -27,7 +28,8 @@ import {  checkReferred, settleErrors } from './helpers/services';
         redirect: 'follow', 
         referrer: window.location.href
       })
-      return checkReferred(response) || settleErrors(response,setErrors)  
+      const errorStatus = await settleErrors(response,setErrors)
+      return errorStatus && resetIndexData()
     }
 
     const handleSubmit = async function handleSubmit(event: React.FormEvent<HTMLFormElement>){

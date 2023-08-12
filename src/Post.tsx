@@ -27,6 +27,7 @@ import { extractPostById } from "./helpers/utils";
 const FormDialog = function(props: FormDialogProps){
     const [open, setOpen] = React.useState(false);
     const [errors, setErrors] = useErrorStates(['_id', 'content', 'user', 'post']);
+    const { resetIndexData } = useIndexData();
 
     
     const handleClickOpen = () => {
@@ -37,7 +38,7 @@ const FormDialog = function(props: FormDialogProps){
       setOpen(false);
     };
 
-    const handleSubmit = props.handleSubmitConstructor(setErrors);
+    const handleSubmit = props.handleSubmitConstructor({resetIndexData, setErrors});
 
     const FormButton = function(){
       return props.button(handleClickOpen)

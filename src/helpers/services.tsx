@@ -2,14 +2,9 @@ import Button from "@mui/material/Button";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { FormDialogProps } from "./types";
+import { FormDialogProps, SubmitConstructorParams } from "./types";
 import { parseAPIErrors, restoreOriginalErrorState } from "./utils";
 
-
-export  const checkReferred = function(res:Response){
-    return res.redirected
-
-};
 
 export const settleErrors = async function(res:Response, setErrors:React.Dispatch<React.SetStateAction<Record<string,Record<string, string | boolean>>>>){
       
@@ -56,7 +51,9 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
       const inputLabel = 'Add Comment';
       const inputText= 'Have your own say on this post.';
       
-      const handleSubmitConstructor = function(setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,){
+      const handleSubmitConstructor = function(params: SubmitConstructorParams){
+
+          const { resetIndexData, setErrors} = params;
 
           const addCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
@@ -68,7 +65,8 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 redirect: 'follow', 
                 referrer: window.location.href
               })
-              return checkReferred(response) || settleErrors(response,setErrors) 
+              const errorStatus = await settleErrors(response,setErrors)
+              return errorStatus && resetIndexData()
 
           };
 
@@ -104,8 +102,10 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
       const inputLabel = 'Delete Comment';
       const inputText= 'Be absolutely sure you want to delete this comment. Once deleted, it shall be impossible to retrieve.';
       const submitLabel = 'Delete'
+      
+      const handleSubmitConstructor = function(params: SubmitConstructorParams){
 
-      const handleSubmitConstructor = function(setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,){
+        const { resetIndexData, setErrors} = params;
 
           const deleteCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
@@ -117,7 +117,8 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 redirect: 'follow', 
                 referrer: window.location.href
               })
-              return settleErrors(response,setErrors)  
+              const errorStatus = await settleErrors(response,setErrors)
+              return errorStatus && resetIndexData()
           }
 
           const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
@@ -158,7 +159,9 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
       const inputLabel = 'Edit Comment';
       const inputText= 'Edit your comment in the field below.';
 
-      const handleSubmitConstructor = function(setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,){
+      const handleSubmitConstructor = function(params: SubmitConstructorParams){
+
+        const { resetIndexData, setErrors} = params;
 
           const editCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
@@ -170,7 +173,8 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 redirect: 'follow', 
                 referrer: window.location.href
               })
-              return checkReferred(response) || settleErrors(response,setErrors) 
+              const errorStatus = await settleErrors(response,setErrors)
+              return errorStatus && resetIndexData()
 
           };
 

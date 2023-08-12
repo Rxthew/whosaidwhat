@@ -8,11 +8,17 @@ export interface CommentInterface {
     
 }
 
+export interface SubmitConstructorParams {
+    resetIndexData: () => void,
+    setErrors:  React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>
+
+}
+
 
 export interface FormDialogProps {
     button: (clickHandler: () => void) => JSX.Element
     delete: boolean,
-    handleSubmitConstructor: (setErrors: React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>,) => (event: React.FormEvent<HTMLFormElement>) => Promise<void>
+    handleSubmitConstructor: (params: SubmitConstructorParams) => (event: React.FormEvent<HTMLFormElement>) => Promise<void>
     inputLabel: string,
     inputText: string,
     content?: string,

@@ -8,12 +8,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useErrorStates, useIndexData } from './helpers/hooks';
-import { checkReferred, settleErrors } from './helpers/services';
+import { settleErrors } from './helpers/services';
  
 const User = function User(){
 
   const [errors,setErrors] = useErrorStates(['first_name', 'last_name', 'username', 'password', 'privilege_code', 'admin_code']);
-  const { user } = useIndexData();
+  const { resetIndexData, user } = useIndexData();
 
   const updateUserFetcher = async function(data:string){
        const userId = user?._id;
@@ -26,7 +26,8 @@ const User = function User(){
         redirect: 'follow', 
         referrer: window.location.href
        })
-       return checkReferred(response) || settleErrors(response,setErrors) 
+       const errorStatus = await settleErrors(response,setErrors)
+       return errorStatus && resetIndexData() 
   };
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
