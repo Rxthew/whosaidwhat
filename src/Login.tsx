@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as FormLink } from 'react-router-dom';
 import { useErrorStates, useIndexData } from './helpers/hooks';
-import {  settleErrors } from './helpers/services';
+import {  redirectToOrigin, settleErrors } from './helpers/services';
 
  const Login = function Login(){
 
@@ -29,7 +29,7 @@ import {  settleErrors } from './helpers/services';
         referrer: window.location.href
       })
       const errorStatus = await settleErrors(response,setErrors)
-      return errorStatus && resetIndexData()
+      return errorStatus && [resetIndexData, redirectToOrigin].map((action)=> action());
     }
 
     const handleSubmit = async function handleSubmit(event: React.FormEvent<HTMLFormElement>){

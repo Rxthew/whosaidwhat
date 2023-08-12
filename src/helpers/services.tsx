@@ -6,6 +6,10 @@ import { FormDialogProps, SubmitConstructorParams } from "./types";
 import { parseAPIErrors, restoreOriginalErrorState } from "./utils";
 
 
+export const redirectToOrigin = function(){
+    return window.location.href = window.location.origin;
+};
+
 export const settleErrors = async function(res:Response, setErrors:React.Dispatch<React.SetStateAction<Record<string,Record<string, string | boolean>>>>){
       
     const response = await res.json();

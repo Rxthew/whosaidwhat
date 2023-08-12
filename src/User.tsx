@@ -8,7 +8,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useErrorStates, useIndexData } from './helpers/hooks';
-import { settleErrors } from './helpers/services';
+import {  redirectToOrigin, settleErrors } from './helpers/services';
  
 const User = function User(){
 
@@ -27,7 +27,7 @@ const User = function User(){
         referrer: window.location.href
        })
        const errorStatus = await settleErrors(response,setErrors)
-       return errorStatus && resetIndexData() 
+       return errorStatus && [resetIndexData, redirectToOrigin].map((action)=> action());
   };
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
