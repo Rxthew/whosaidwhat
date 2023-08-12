@@ -29,8 +29,8 @@ export const useFetchIndexData = function(){
 
     useEffect(()=> {
 
-        const checkData = function(){
-            return posts && posts.length > 0 && user
+        const checkIfDataIsNull = function(){
+            return posts === null && user === null
         };
 
         const setFreshUser = function(res:Record<'user' | 'posts',UserInterface | PostsType>){
@@ -57,6 +57,7 @@ export const useFetchIndexData = function(){
         const fetchData = async function(){
             const response = await fetch("http://localhost:3000/", { //Update url when ready.
                 headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+                credentials: 'include',
                 method: 'GET', 
                 mode: 'cors',
                 signal: abortFetch.signal
@@ -64,7 +65,7 @@ export const useFetchIndexData = function(){
             return response.ok ?  setFreshIndexData(await response.json()) : false
         };
 
-        checkData() && fetchData()
+        checkIfDataIsNull() && fetchData()
 
         return () => {
             abortFetch.abort()
