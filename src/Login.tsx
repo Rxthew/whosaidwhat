@@ -20,6 +20,7 @@ import {  checkReferred, settleErrors } from './helpers/services';
     const loginFetcher = async function(data:string){
       const response = await fetch("http://localhost:3000/login", { //Update url when ready.
         body: data,
+        credentials: 'include',
         headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
         method: 'POST', 
         mode: 'cors',

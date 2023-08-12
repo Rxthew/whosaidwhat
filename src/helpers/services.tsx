@@ -61,6 +61,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
           const addCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
                 body: data,
+                credentials: 'include',
                 headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
                 method: 'POST', 
                 mode: 'cors',
@@ -109,6 +110,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
           const deleteCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
                 body: data,
+                credentials: 'include',
                 headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
                 method: 'DELETE', 
                 mode: 'cors',
@@ -161,6 +163,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
           const editCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
                 body: data,
+                credentials: 'include',
                 headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
                 method: 'POST', 
                 mode: 'cors',

@@ -19,6 +19,7 @@ const User = function User(){
        const userId = user?._id;
        const response = await fetch(`localhost:3000/${userId}`, {  //Update url when ready.
         body: data,
+        credentials: 'include',
         headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
         method: 'PUT', 
         mode: 'cors',

@@ -20,6 +20,7 @@ const Signup = function Signup(){
   const signUpFetcher = async function(data:string){
     const response = await fetch("http://localhost:3000/signup", { //Update url when ready.
       body: data, 
+      credentials: 'include',
       headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
       method: 'POST', 
       mode: 'cors',
