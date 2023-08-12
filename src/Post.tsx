@@ -20,7 +20,8 @@ import * as React from 'react';
 import { useParams } from "react-router-dom";
 import { useErrorStates, useIndexData } from "./helpers/hooks";
 import { CommentInterface, FormDialogProps } from "./helpers/types";
-import { extractPostById, produceCommentFormProps } from "./helpers/utils";
+import { produceCommentFormProps } from './helpers/services';
+import { extractPostById } from "./helpers/utils";
 
 
 const FormDialog = function(props: FormDialogProps){
