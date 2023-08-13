@@ -2,9 +2,16 @@ import Button from "@mui/material/Button";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { FormDialogProps, SubmitConstructorParams } from "./types";
+import { FormDialogProps, NotificationActionInterface, NotificationReducerInterface, SubmitConstructorParams } from "./types";
 import { parseAPIErrors, restoreOriginalErrorState } from "./utils";
 
+export const notificationReducer = function(state: NotificationReducerInterface, action: NotificationActionInterface){
+    switch(action.type){
+        case 'Add Comment': return Object.assign({}, state, {'Add Comment Notify': {message: state['Add Comment Notify']['message'], status: action.status['Add Comment']}})
+        case 'Delete Comment': return Object.assign({}, state, {'Delete Comment Notify': {message: state['Delete Comment Notify']['message'], status: action.status['Delete Comment']}})
+        case 'Edit Comment': return Object.assign({}, state, {'Edit Comment Notify': {message: state['Edit Comment Notify']['message'] ,status: action.status['Edit Comment']}})
+    }
+};
 
 export const redirectToOrigin = function(){
     return window.location.href = window.location.origin;
