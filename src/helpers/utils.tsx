@@ -7,7 +7,6 @@ export const extractPostById = function(id:string, posts:PostsType){
     return post
 };
 
-
 export const produceDefaultErrorPairs = function(errorKeys:string[]){
 
     const produceDefaultErrorValue = function(){
@@ -23,6 +22,38 @@ export const produceDefaultErrorPairs = function(errorKeys:string[]){
         return [key, produceDefaultErrorValue()]
     })]
 
+};
+
+export const produceDefaultNotificationStatus = function(){
+
+    const _convertNotificationToAction = function(key: string){
+        return {
+            type: key,
+            status: false
+        }
+    };
+
+    const notification = function(){
+        return {
+            'Add Comment Notify': {message: 'Commen successfully added.' ,status: false}, 
+            'Delete Comment Notify': {message: 'Commen successfully deleted.' ,status: false}, 
+            'Edit Comment Notify': {message: 'Commen successfully modified.' ,status: false}
+        }
+    };
+
+    const dispatch = function(){
+        const defaultKeys = Object.keys(notification());
+        const defaultStatusesCollection = defaultKeys.map(_convertNotificationToAction);
+        const defaultStatuses = Object.assign({}, ...defaultStatusesCollection);
+        return defaultStatuses
+
+
+    };
+
+    return {
+        dispatch,
+        notification,
+    }
 };
 
 

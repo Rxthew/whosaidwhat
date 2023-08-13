@@ -8,11 +8,7 @@ export interface CommentInterface {
     
 }
 
-export interface SubmitConstructorParams {
-    resetIndexData: () => void,
-    setErrors:  React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>
-
-}
+export type CommentsType = ReadonlyArray<CommentInterface>
 
 
 export interface FormDialogProps {
@@ -26,7 +22,24 @@ export interface FormDialogProps {
   
   }
 
-export type CommentsType = ReadonlyArray<CommentInterface>
+type NotificationActionKeys = 'Add Comment' | 'Delete Comment' | 'Edit Comment'
+export interface NotificationActionInterface {
+    type: NotificationActionKeys,
+    status: Record<NotificationActionKeys,boolean>
+}
+
+interface NotificationStateDetails {
+    message: string
+    status: boolean
+}
+
+export interface NotificationReducerInterface {
+    'Add Comment Notify': NotificationStateDetails
+    'Delete Comment Notify': NotificationStateDetails   
+    'Edit Comment Notify': NotificationStateDetails
+    
+}
+
 
 interface PostInterface { 
     _id: string,
@@ -39,6 +52,14 @@ interface PostInterface {
 }
 
 
+export type PostsType = ReadonlyArray<PostInterface>
+
+export interface SubmitConstructorParams {
+    resetIndexData: () => void,
+    setErrors:  React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>
+
+}
+
 export interface UserInterface { 
     _id: string,
     username: string,
@@ -47,7 +68,6 @@ export interface UserInterface {
     last_name?: string
 }
 
-export type PostsType = ReadonlyArray<PostInterface>
 
 export interface IndexInterface {
     user: UserInterface | null,
