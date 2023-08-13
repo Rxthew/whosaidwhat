@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import { NotificationsContext, NotificationsDispatchContext } from "./contexts";
 import { PostsType, UserInterface, IndexInterface } from "./types";
 import { produceDefaultErrorPairs } from "./utils";
 
@@ -12,10 +13,6 @@ export const useErrorStates = function(errorParameters: string[]){
     return [errors,setErrors]
 };
 
-
-export const useIndexData = function(){
-    return useOutletContext<IndexInterface>()
-}
 
 export const useFetchIndexData = function(){
 
@@ -76,4 +73,17 @@ export const useFetchIndexData = function(){
 
 
    return {user, posts, resetIndexData, setUser, setPosts}
-}
+};
+
+
+export const useIndexData = function(){
+    return useOutletContext<IndexInterface>()
+};
+
+export const useNotifications = function(){
+    return useContext(NotificationsContext)
+};
+
+export const useNotificationsDispatch = function(){
+    return useContext(NotificationsDispatchContext)
+};
