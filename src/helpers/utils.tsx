@@ -25,35 +25,13 @@ export const produceDefaultErrorPairs = function(errorKeys:string[]){
 };
 
 export const produceDefaultNotificationStatus = function(){
-
-    const _convertNotificationToAction = function(key: string){
-        return {
-            type: key,
-            status: false
-        }
-    };
-
-    const notification = function(){
-        return {
-            'Add Comment Notify': {message: 'Commen successfully added.' ,status: false}, 
-            'Delete Comment Notify': {message: 'Commen successfully deleted.' ,status: false}, 
-            'Edit Comment Notify': {message: 'Commen successfully modified.' ,status: false}
-        }
-    };
-
-    const dispatch = function(){
-        const defaultKeys = Object.keys(notification());
-        const defaultStatusesCollection = defaultKeys.map(_convertNotificationToAction);
-        const defaultStatuses = Object.assign({}, ...defaultStatusesCollection);
-        return defaultStatuses
-
-
-    };
-
+    
     return {
-        dispatch,
-        notification,
+        'Add Comment Notify': {message: 'Comment successfully added.' ,status: false}, 
+        'Delete Comment Notify': {message: 'Comment successfully deleted.' ,status: false}, 
+        'Edit Comment Notify': {message: 'Comment successfully modified.' ,status: false}
     }
+   
 };
 
 

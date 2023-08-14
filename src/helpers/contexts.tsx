@@ -8,7 +8,7 @@ export const NotificationsDispatchContext = createContext<null | React.Dispatch<
 
 export const NotificationsContextProvider = function(children:ReactNode){
         
-    const defaultNotificationStatus = produceDefaultNotificationStatus().notification();
+    const defaultNotificationStatus = produceDefaultNotificationStatus(); 
     const [notifications, dispatch] = useReducer(notificationReducer, defaultNotificationStatus)
     return (
         <NotificationsContext.Provider value={notifications}>
