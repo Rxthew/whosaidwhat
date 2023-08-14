@@ -1,3 +1,4 @@
+import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar'
 import Button from "@mui/material/Button";
 import Box from '@mui/material/Box';
@@ -12,22 +13,25 @@ import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
 import TextField  from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { DateTime } from 'luxon';
 import * as React from 'react'; 
 import { useParams } from "react-router-dom";
-import { useErrorStates, useIndexData } from "./helpers/hooks";
-import { CommentInterface, FormDialogProps } from "./helpers/types";
+import { NotificationsContextProvider } from './helpers/contexts';
+import { useErrorStates, useIndexData, useNotifications, useNotificationsDispatch } from "./helpers/hooks";
+import { CommentInterface, FormDialogProps, NotificationReducerInterface } from "./helpers/types";
 import { produceCommentFormProps } from './helpers/services';
-import { extractPostById } from "./helpers/utils";
+import { extractPostById  } from "./helpers/utils";
 
 
 const FormDialog = function(props: FormDialogProps){
     const [open, setOpen] = React.useState(false);
     const [errors, setErrors] = useErrorStates(['_id', 'content', 'user', 'post']);
     const { resetIndexData } = useIndexData();
+    const setNotifications = useNotificationsDispatch();
 
     
     const handleClickOpen = () => {
@@ -38,7 +42,7 @@ const FormDialog = function(props: FormDialogProps){
       setOpen(false);
     };
 
-    const handleSubmit = props.handleSubmitConstructor({resetIndexData, setErrors});
+    const handleSubmit = props.handleSubmitConstructor({resetIndexData, setErrors, setNotifications});
 
     const FormButton = function(){
       return props.button(handleClickOpen)
@@ -89,6 +93,36 @@ const FormDialog = function(props: FormDialogProps){
       </div>
     );
   }
+
+const StatusNotification = function(){
+
+  const notifications = useNotifications();
+  const dispatch = useNotificationsDispatch();
+
+  const handleClose = function(){ 
+    const result = dispatch && dispatch({type: 'Default'});
+    return result === null ? console.error('Notification dispatch setter is null') : result
+  };
+
+  const convertToSnackbar = function(key: keyof NotificationReducerInterface ){
+    
+    return notifications && (
+      <Box key={key}>
+        <Snackbar open={notifications[key]['status']} autoHideDuration={7000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success">
+            {notifications[key]['message']}
+          </Alert>
+        </Snackbar> 
+      </Box>
+    )
+  }
+  const notificationKeys = notifications && Object.keys(notifications);
+  return (
+    <>
+      {notificationKeys === null ? console.error('Notifications are null') : notificationKeys.map((key) => convertToSnackbar(key as keyof NotificationReducerInterface))}
+    </>
+  )
+}
 
   const {
          addCommentProps, 
@@ -166,14 +200,14 @@ const Comment = function(props: CommentInterface){
   );   
 }; 
 
-const Post = function Post(){
+const Post = function Post(){   
     const { postId }  = useParams();
     const { user, posts } = useIndexData();
     const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
     return (
        <>
        <Container>
-          {post ? (
+          {post ? NotificationsContextProvider((
               <>
               <Typography component='h1' variant='h4'>{post.title}</Typography>
               <Typography variant='body2' sx={{padding: '1rem', whiteSpace: 'pre-line'}}>
@@ -197,13 +231,15 @@ const Post = function Post(){
                 {post.comments.map((comment)=>
                   <Comment _id={comment._id} content={comment.content} date={comment.date} key={comment._id} post={postId as string} user={comment.user} />
                 )}
+                <StatusNotification />
               </Stack>
             </Container>  
           </>
-          ): <Typography>This post is not available right now.</Typography>}
+          )): <Typography>This post is not available right now.</Typography>}
         </Container> 
        </>
     )
 };
+
 
 export default Post
