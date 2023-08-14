@@ -22,10 +22,9 @@ export interface FormDialogProps {
   
   }
 
-type NotificationActionKeys = 'Add Comment' | 'Delete Comment' | 'Edit Comment'
+type NotificationActionKeys = 'Add Comment' | 'Delete Comment' | 'Edit Comment' | 'Default'
 export interface NotificationActionInterface {
     type: NotificationActionKeys,
-    status: Record<NotificationActionKeys,boolean>
 }
 
 interface NotificationStateDetails {
@@ -57,6 +56,7 @@ export type PostsType = ReadonlyArray<PostInterface>
 export interface SubmitConstructorParams {
     resetIndexData: () => void,
     setErrors:  React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>
+    setNotifications: React.Dispatch<NotificationActionInterface> | null
 
 }
 
