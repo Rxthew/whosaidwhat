@@ -3,13 +3,14 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { FormDialogProps, NotificationActionInterface, NotificationReducerInterface, SubmitConstructorParams } from "./types";
-import { parseAPIErrors, restoreOriginalErrorState } from "./utils";
+import { parseAPIErrors, produceDefaultNotificationStatus, restoreOriginalErrorState } from "./utils";
 
-export const notificationReducer = function(state: NotificationReducerInterface, action: NotificationActionInterface){
+export const notificationReducer = function(state: NotificationReducerInterface, action: NotificationActionInterface){ 
     switch(action.type){
-        case 'Add Comment': return Object.assign({}, state, {'Add Comment Notify': {message: state['Add Comment Notify']['message'], status: action.status['Add Comment']}})
-        case 'Delete Comment': return Object.assign({}, state, {'Delete Comment Notify': {message: state['Delete Comment Notify']['message'], status: action.status['Delete Comment']}})
-        case 'Edit Comment': return Object.assign({}, state, {'Edit Comment Notify': {message: state['Edit Comment Notify']['message'] ,status: action.status['Edit Comment']}})
+        case 'Add Comment': return Object.assign({}, state, {'Add Comment Notify': {message: state['Add Comment Notify']['message'], status: true}})
+        case 'Delete Comment': return Object.assign({}, state, {'Delete Comment Notify': {message: state['Delete Comment Notify']['message'], status: true}})
+        case 'Edit Comment': return Object.assign({}, state, {'Edit Comment Notify': {message: state['Edit Comment Notify']['message'] ,status: true}})
+        case 'Default' : return Object.assign({}, state, produceDefaultNotificationStatus());
     }
 };
 
@@ -64,7 +65,12 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
       
       const handleSubmitConstructor = function(params: SubmitConstructorParams){
 
-          const { resetIndexData, setErrors} = params;
+          const { resetIndexData, setErrors, setNotifications} = params;
+
+
+         const notifyAddCommentSuccess = function(){
+            setNotifications ? setNotifications({type: 'Add Comment'}) : console.error('setNotficiations is null')
+         };
 
           const addCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
@@ -77,7 +83,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 referrer: window.location.href
               })
               const errorStatus = await settleErrors(response,setErrors)
-              return errorStatus && resetIndexData()
+              return errorStatus && [resetIndexData, notifyAddCommentSuccess].map(action => action())
 
           };
 
@@ -116,7 +122,11 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
       
       const handleSubmitConstructor = function(params: SubmitConstructorParams){
 
-        const { resetIndexData, setErrors} = params;
+        const { resetIndexData, setErrors, setNotifications} = params;
+
+        const notifyDeleteCommentSuccess = function(){
+            setNotifications ? setNotifications({type: 'Delete Comment'}) : console.error('setNotficiations is null')
+         };   
 
           const deleteCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
@@ -129,7 +139,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 referrer: window.location.href
               })
               const errorStatus = await settleErrors(response,setErrors)
-              return errorStatus && resetIndexData()
+              return errorStatus && [resetIndexData, notifyDeleteCommentSuccess].map(action => action())
           }
 
           const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
@@ -172,7 +182,12 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
 
       const handleSubmitConstructor = function(params: SubmitConstructorParams){
 
-        const { resetIndexData, setErrors} = params;
+        const { resetIndexData, setErrors, setNotifications} = params;
+
+        const notifyEditCommentSuccess = function(){
+            setNotifications ? setNotifications({type: 'Edit Comment'}) : console.error('setNotficiations is null')
+         };   
+
 
           const editCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
@@ -185,7 +200,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 referrer: window.location.href
               })
               const errorStatus = await settleErrors(response,setErrors)
-              return errorStatus && resetIndexData()
+              return errorStatus && [resetIndexData, notifyEditCommentSuccess].map(action => action())
 
           };
 
