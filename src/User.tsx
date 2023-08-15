@@ -12,7 +12,7 @@ import {  redirectToOrigin, settleErrors } from './helpers/services';
  
 const User = function User(){
 
-  const [errors,setErrors] = useErrorStates(['first_name', 'last_name', 'username', 'password', 'privilege_code', 'admin_code']);
+  const [errors,setErrors] = useErrorStates(['first_name', 'last_name', 'username', 'current_password', 'new_password', 'privilege_code', 'admin_code']);
   const { resetIndexData, user } = useIndexData();
 
   const updateUserFetcher = async function(data:string){

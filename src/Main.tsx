@@ -27,7 +27,7 @@ interface postPreviewProps {
 const PostPreview = function PostPreview(props: postPreviewProps) {
   const { post } = props;
 
-  const commentsCount = post.comments.length - 1;
+  const commentsCount = post.comments.length;
 
   const truncatePostContent = function truncatePostContent(content:string){
     return content.substring(0,350) + '...'

@@ -201,7 +201,7 @@ const Comment = function(props: CommentInterface){
 }; 
 
 const Post = function Post(){   
-    const { postId }  = useParams();
+    const { postId } = useParams();
     const { user, posts } = useIndexData();
     const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
     return (
@@ -216,7 +216,7 @@ const Post = function Post(){
               <Divider />
           <Container>
             <Stack spacing={2}>
-                ({ (user?.member_status === 'privileged' || user?.member_status === 'admin') &&
+                { (user?.member_status === 'privileged' || user?.member_status === 'admin') &&
                 <Grid container spacing={2} sx={{p:2, borderBottom: '1px solid', minWidth:'fit-content'}} wrap='nowrap'>
                   <Grid item>
                     <Avatar sx={{bgcolor:'#1976d2', width: '30px', height:'30px'}}>{user?.username[0].toUpperCase()}</Avatar>
@@ -227,7 +227,7 @@ const Post = function Post(){
                   <Grid item>
                     <FormDialog {...addCommentProps(postId as string)}/>
                   </Grid>
-                </Grid>})
+                </Grid>}
                 {post.comments.map((comment)=>
                   <Comment _id={comment._id} content={comment.content} date={comment.date} key={comment._id} post={postId as string} user={comment.user} />
                 )}
