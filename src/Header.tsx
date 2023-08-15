@@ -15,6 +15,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react'
 import { Link as HeaderLink } from 'react-router-dom';
+import { useIndexData } from './helpers/hooks';
+import { redirectToOrigin } from './helpers/services';
 import { UserInterface } from './helpers/types';
 
 
@@ -26,11 +28,24 @@ interface HeaderProps {
 export default function Header(props:HeaderProps) {
     const {username} = props.user || {username: null};
     const [mobileOpen, setMobileOpen] = useState(false);
+    const { resetIndexData } = useIndexData();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
+
+  const hangleLogout= async function(){
+    const response = await fetch("http://localhost:3000/logout", { //Update url when ready.
+        headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
+        credentials: 'include',
+        method: 'GET', 
+        mode: 'cors',
+      })
+    return response.ok ?  [resetIndexData, redirectToOrigin].map((action)=> action()) : console.error(response.statusText)
+};
+
+   
   const drawerWidth = 240;
 
   const navItems = username ? ["Edit profile", "Log out"] : ["Sign up", "Log in"]
@@ -117,7 +132,7 @@ export default function Header(props:HeaderProps) {
                   </Button>
                 </Link>
                 <Link component={HeaderLink} to={'/login'} color="inherit">
-                  <Button color="inherit" >
+                  <Button color="inherit" onClick={hangleLogout} >
                     Log in
                   </Button>
                 </Link>
