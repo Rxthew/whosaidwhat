@@ -15,12 +15,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react'
 import { Link as HeaderLink } from 'react-router-dom';
-import { useIndexData } from './helpers/hooks';
 import { redirectToOrigin } from './helpers/services';
 import { UserInterface } from './helpers/types';
 
 
 interface HeaderProps {
+    reset: () => void
     user?: UserInterface,
 
 }
@@ -28,18 +28,18 @@ interface HeaderProps {
 export default function Header(props:HeaderProps) {
     const {username} = props.user || {username: null};
     const [mobileOpen, setMobileOpen] = useState(false);
-    const { resetIndexData } = useIndexData();
+    const resetIndexData  = props.reset
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
 
-  const hangleLogout= async function(){
+  const handleLogout= async function(){
     const response = await fetch("http://localhost:3000/logout", { //Update url when ready.
         headers: {"Accept": "application/json", "Origin": `${window.location.origin}`},
         credentials: 'include',
-        method: 'GET', 
+        method: 'POST', 
         mode: 'cors',
       })
     return response.ok ?  [resetIndexData, redirectToOrigin].map((action)=> action()) : console.error(response.statusText)
@@ -118,11 +118,9 @@ export default function Header(props:HeaderProps) {
                       Edit profile
                   </Button>
                 </Link>
-                <Link component={HeaderLink} to={'/logout'} color="inherit">
-                  <Button color="inherit" >
-                      Log out
-                  </Button>
-                </Link>
+                <Button color="inherit" onClick={handleLogout}>
+                    Log out
+                </Button>
               </> )
               : 
               ( <>
@@ -132,7 +130,7 @@ export default function Header(props:HeaderProps) {
                   </Button>
                 </Link>
                 <Link component={HeaderLink} to={'/login'} color="inherit">
-                  <Button color="inherit" onClick={hangleLogout} >
+                  <Button color="inherit" >
                     Log in
                   </Button>
                 </Link>

@@ -10,7 +10,7 @@ const Blog = function Blog() {
 
   return (
     <>
-      { user ? (<Header user={user}/>) : (<Header />) }
+      { user ? (<Header reset={resetIndexData} user={user}/>) : (<Header reset={resetIndexData} />) }
       <Outlet context={{user, posts, resetIndexData, setUser, setPosts} satisfies IndexInterface}/>
     </>
   )
