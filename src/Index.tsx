@@ -28,11 +28,11 @@ const blogRouter = createBrowserRouter([{
       element: <Login/>
     },
     {
-      path: '/post/*',
+      path: '/post/:postId',
       element: <Post /> 
     },
     {
-      path: '/user/*',
+      path: '/user/:userId',
       element: <User /> 
     }
 
