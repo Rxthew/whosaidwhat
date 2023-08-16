@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'; 
 import { PostsType } from "./types";
 import React from "react";
 
@@ -69,4 +70,12 @@ export const restoreOriginalErrorState = function(errorsSetter: React.Dispatch<R
     }
     errorsSetter(restorer)
 };
+
+export const regulariseDate = function(postDate){    
+    const utcDate = DateTime.fromISO(postDate, {zone: 'utc'});
+    const localDate = utcDate.toLocal();
+    const date = localDate.toLocaleString();
+    return date
+
+}
 

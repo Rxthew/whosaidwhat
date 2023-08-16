@@ -17,14 +17,13 @@ import Snackbar from '@mui/material/Snackbar';
 import TextField  from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { DateTime } from 'luxon';
 import * as React from 'react'; 
 import { useParams } from "react-router-dom";
 import { NotificationsContextProvider } from './helpers/contexts';
 import { useErrorStates, useIndexData, useNotifications, useNotificationsDispatch } from "./helpers/hooks";
 import { CommentInterface, FormDialogProps, NotificationReducerInterface } from "./helpers/types";
 import { produceCommentFormProps } from './helpers/services';
-import { extractPostById  } from "./helpers/utils";
+import { extractPostById, regulariseDate  } from "./helpers/utils";
 
 
 const FormDialog = function(props: FormDialogProps){
@@ -135,6 +134,7 @@ const Comment = function(props: CommentInterface){
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const { user } = useIndexData();
+  const date = regulariseDate(props.date);
   
   const isUserCommentOwner = user && props.user && user?._id === props.user?._id;
   const isUserPrivilegedMember = user?.member_status === 'privileged';
@@ -160,7 +160,7 @@ const Comment = function(props: CommentInterface){
           <Typography variant='overline'>{props.user?.username || 'Anonymous'}:</Typography>      
         </Grid>
         <Grid item>
-          <Typography>{props.date}</Typography>
+          <Typography variant='subtitle1' color='text.secondary'>{date}</Typography>
         </Grid>
         {(isUserAdminMember || isUserPrivilegedOwner) && (
         <Grid item sx={{ml:'auto'}}>
@@ -204,12 +204,14 @@ const Post = function Post(){
     const { postId } = useParams();
     const { user, posts } = useIndexData();
     const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
+    const date = regulariseDate(post.date);
     return (
        <>
        <Container>
           {post ? NotificationsContextProvider((
               <>
               <Typography component='h1' variant='h4'>{post.title}</Typography>
+              <Typography variant='subtitle1' color="text.secondary">{date}</Typography>
               <Typography variant='body2' sx={{padding: '1rem', whiteSpace: 'pre-line'}}>
                 {post.content}
               </Typography>

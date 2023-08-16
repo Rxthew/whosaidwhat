@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import { Link as PostLink } from 'react-router-dom';
 import { useIndexData } from './helpers/hooks';
 import { CommentsType } from './helpers/types';
+import { regulariseDate } from './helpers/utils';
+
 
 
 interface postPreviewProps {
@@ -28,6 +30,7 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
   const { post } = props;
 
   const commentsCount = post.comments.length;
+  const date = regulariseDate(post.date);
 
   const truncatePostContent = function truncatePostContent(content:string){
     return content.substring(0,350) + '...'
@@ -42,7 +45,7 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
               {post.title}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {post.date}
+              {date}
             </Typography>
             <Typography variant="subtitle1" paragraph>
               {truncatePostContent(post.content)}
