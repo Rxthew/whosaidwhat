@@ -51,11 +51,9 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
               {truncatePostContent(post.content)}
             </Typography>
             <Grid sx={{display: 'flex'}} justifyContent="space-between">
-              <Link component={PostLink} to={`/post/${post._id}`}>
                 <Typography variant="subtitle1" color="primary">
                     Continue reading...
                 </Typography>
-              </Link>     
               <Badge badgeContent={commentsCount} color="primary">
                 <Comment color="primary" titleAccess="CommentsIcon" fontSize='large' />
               </Badge>
