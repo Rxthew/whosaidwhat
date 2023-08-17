@@ -2,6 +2,7 @@ import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar'
 import Button from "@mui/material/Button";
 import Box from '@mui/material/Box';
+import CircularProgress  from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container'
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -20,7 +21,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import * as React from 'react'; 
 import { useParams } from "react-router-dom";
 import { NotificationsContextProvider } from './helpers/contexts';
-import { useErrorStates, useIndexData, useNotifications, useNotificationsDispatch } from "./helpers/hooks";
+import { useErrorStates, useIndexData, useLoadingState, useNotifications, useNotificationsDispatch } from "./helpers/hooks";
 import { CommentInterface, FormDialogProps, NotificationReducerInterface } from "./helpers/types";
 import { produceCommentFormProps } from './helpers/services';
 import { extractPostById, regulariseDate  } from "./helpers/utils";
@@ -203,12 +204,19 @@ const Comment = function(props: CommentInterface){
 const Post = function Post(){   
     const { postId } = useParams();
     const { user, posts } = useIndexData();
+    const loading = useLoadingState();
     const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
-    const date = regulariseDate(post.date);
+    const date = regulariseDate(post?.date);
+    
     return (
        <>
-       <Container>
-          {post ? NotificationsContextProvider((
+       {NotificationsContextProvider(
+       <Container sx={{py:4}}>
+          {loading && (
+            <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                <CircularProgress size={60}/>
+            </Box>)}
+          {post && !loading && (
               <>
               <Typography component='h1' variant='h4'>{post.title}</Typography>
               <Typography variant='subtitle1' color="text.secondary">{date}</Typography>
@@ -237,8 +245,9 @@ const Post = function Post(){
               </Stack>
             </Container>  
           </>
-          )): <Typography>This post is not available right now.</Typography>}
-        </Container> 
+          )}
+          {!post && !loading && (<Typography align='center' component='h2' variant='h5'>This post is not available right now.</Typography>)}
+        </Container>)} 
        </>
     )
 };
