@@ -71,15 +71,17 @@ const FormDialog = function(props: FormDialogProps){
               <form id="dialogForm" onSubmit={handleSubmit}>
                 <TextField 
                 autoFocus
+                defaultValue={props.content || ""}
+                fullWidth
+                id="content"
                 margin="dense"
                 multiline
-                id="content"
                 name="content"
-                label="content"
+                label={props.inputLabel}
+                rows={8}
+                size="medium"
                 type="text"
-                fullWidth
                 variant="standard"
-                value={props.content || ""}
                 sx={{whiteSpace:"pre-line"}} 
                 />
               </form>
@@ -232,7 +234,7 @@ const Post = function Post(){
                     <Avatar sx={{bgcolor:'#1976d2', width: '30px', height:'30px'}}>{user?.username[0].toUpperCase()}</Avatar>
                   </Grid>
                   <Grid item sx={{flexGrow: '1'}}>
-                    <Typography>User </Typography>
+                    <Typography>{user?.username || 'User'} </Typography>
                   </Grid>
                   <Grid item>
                     <FormDialog {...addCommentProps(postId as string)}/>
