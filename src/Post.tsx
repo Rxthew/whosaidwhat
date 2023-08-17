@@ -187,8 +187,8 @@ const Comment = function(props: CommentInterface){
           }}
         >
             <Stack sx={{p:1}}>
-              <FormDialog {...editCommentProps({content: props.content, id: props._id, post: props.post})} />
-              <FormDialog {...deleteCommentProps(props._id)} />      
+              <FormDialog {...editCommentProps({content: props.content, id: props._id, post: props.post, userId: user._id})} />
+              <FormDialog {...deleteCommentProps(props._id, user._id)} />      
             </Stack>
           </Popover>
         
@@ -237,7 +237,7 @@ const Post = function Post(){
                     <Typography>{user?.username || 'User'} </Typography>
                   </Grid>
                   <Grid item>
-                    <FormDialog {...addCommentProps(postId as string)}/>
+                    <FormDialog {...addCommentProps(postId as string, user._id)}/>
                   </Grid>
                 </Grid>}
                 {post.comments.map((comment)=>

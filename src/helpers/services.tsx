@@ -45,7 +45,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
 
  export const produceCommentFormProps = function(){
 
-  const addCommentProps = function(post:string):FormDialogProps{
+  const addCommentProps = function(post:string, user: string):FormDialogProps{
       
       const button = function(clickHandler: () => void){
           return (
@@ -90,7 +90,8 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
           const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
               event.preventDefault();
               const rawData = new FormData(event.currentTarget);
-              post ? rawData.append('post', post) : false;
+              rawData.append('post', post);
+              rawData.append('user',user);
               const data = JSON.stringify(Object.fromEntries(rawData.entries()));
               await addCommentFetcher(data)
           
@@ -110,7 +111,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
 
   };   
 
-  const deleteCommentProps = function(id: string){
+  const deleteCommentProps = function(id: string, userId: string){
 
       const button = function(clickHandler: () => void){
           return <Button size='small' variant='text' startIcon={<DeleteIcon />} sx={{mr: 'auto'}} onClick={clickHandler}>Delete comment</Button>  
@@ -147,6 +148,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
               const _id = id
               const rawData = new FormData();
               rawData.append('_id', _id);
+              rawData.append('user', userId);
               const data = JSON.stringify(Object.fromEntries(rawData.entries()));
               await deleteCommentFetcher(data);
               return
@@ -169,9 +171,9 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
 
   };
 
-  const editCommentProps = function(modifyingKeys:Record<'id' | 'content' | 'post', string>){
+  const editCommentProps = function(modifyingKeys:Record<'id' | 'content' | 'post' | 'userId', string>){
 
-      const {content, id, post} = modifyingKeys;
+      const {content, id, post, userId} = modifyingKeys;
 
       const button = function(clickHandler: () => void){
           return <Button size='small' variant='text' startIcon={<EditIcon />} sx={{mr:'auto'}} onClick={clickHandler}>Edit comment</Button>
@@ -194,7 +196,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 body: data,
                 credentials: 'include',
                 headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
-                method: 'POST', 
+                method: 'PUT', 
                 mode: 'cors',
                 redirect: 'follow', 
                 referrer: window.location.href
@@ -210,6 +212,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
               const _id = id
               rawData.append('_id', _id);
               rawData.append('post', post);
+              rawData.append('user', userId);
               const data = JSON.stringify(Object.fromEntries(rawData.entries()));
               await editCommentFetcher(data)
           
