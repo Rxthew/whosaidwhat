@@ -30,20 +30,20 @@ export const useFetchIndexData = function(){
             return posts === null && user === null
         };
 
-        const setFreshUser = function(res:Record<'user' | 'posts',UserInterface | PostsType>){
+        const setFreshUser = function(res:Record<'user' | 'posts', UserInterface | PostsType>){
             const responseUser = res.user;
             setUser(() => Object.assign({}, responseUser as UserInterface))
             return 
         };
 
-        const setFreshPosts = function(res:Record<'user' | 'posts',UserInterface | PostsType>){
+        const setFreshPosts = function(res:Record<'user' | 'posts', UserInterface | PostsType>){
             const responsePosts = res.posts;
             setPosts([...responsePosts as PostsType])
             return
 
         };
 
-        const setFreshIndexData = function(res:Record<'user' | 'posts',UserInterface | PostsType>){
+        const setFreshIndexData = function(res:Record<'user' | 'posts', UserInterface | PostsType>){
             setFreshUser(res);
             setFreshPosts(res);
             return
@@ -78,6 +78,21 @@ export const useFetchIndexData = function(){
 
 export const useIndexData = function(){
     return useOutletContext<IndexInterface>()
+};
+
+export const useLoadingState = function(){
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(()=>{
+        const timeout = loading ? setTimeout(()=>{setLoading(false)},2000) : null
+
+        return () => {
+            timeout === null ? null : clearTimeout(timeout)
+        }
+
+    },[loading])
+
+    return loading
 };
 
 export const useNotifications = function(){
