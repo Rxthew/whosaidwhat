@@ -67,7 +67,9 @@ const FormDialog = function(props: FormDialogProps){
             <DialogContentText>
               {props.inputText}
             </DialogContentText>
-            {props.delete || (
+            {props.delete ? 
+              (<form id="dialogForm" onSubmit={handleSubmit}></form>) 
+               : (
               <form id="dialogForm" onSubmit={handleSubmit}>
                 <TextField 
                 autoFocus
