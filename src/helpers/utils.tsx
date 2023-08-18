@@ -71,7 +71,7 @@ export const restoreOriginalErrorState = function(errorsSetter: React.Dispatch<R
     errorsSetter(restorer)
 };
 
-export const regulariseDate = function(postDate){    
+export const regulariseDate = function(postDate:string){    
     const utcDate = DateTime.fromISO(postDate, {zone: 'utc'});
     const localDate = utcDate.toLocal();
     const date = localDate.toLocaleString();

@@ -24,7 +24,7 @@ import { NotificationsContextProvider } from './helpers/contexts';
 import { useErrorStates, useIndexData, useLoadingState, useNotifications, useNotificationsDispatch } from "./helpers/hooks";
 import { CommentInterface, FormDialogProps, NotificationReducerInterface } from "./helpers/types";
 import { produceCommentFormProps } from './helpers/services';
-import { extractPostById, regulariseDate  } from "./helpers/utils";
+import { extractPostById, regulariseDate, restoreOriginalErrorState  } from "./helpers/utils";
 
 
 const FormDialog = function(props: FormDialogProps){
@@ -40,6 +40,7 @@ const FormDialog = function(props: FormDialogProps){
   
     const handleClose = () => {
       setOpen(false);
+      restoreOriginalErrorState(setErrors);
     };
 
     const handleSubmit = props.handleSubmitConstructor({resetIndexData, setErrors, setNotifications});
@@ -51,17 +52,17 @@ const FormDialog = function(props: FormDialogProps){
     return (
       <div>
         <FormButton />
+        <Dialog fullWidth open={open} onClose={handleClose}>
         {errors.general.error && (
-        <Typography component="h2" variant="h6" sx={{color: "red"}}>
+        <Typography component="h2" variant="h6" sx={{color: "red", p:2}}>
         Error: {errors.general.msg}
         </Typography>
         )}
         {errors.content.error && (
-        <Typography component="h2" variant="h6" sx={{color: "red"}}>
+        <Typography component="h2" variant="h6" sx={{color: "red", p:2}}>
         Error: {errors.content.msg}
         </Typography>
         )}
-        <Dialog open={open} onClose={handleClose}>
           <DialogTitle>{props.inputLabel}</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -159,7 +160,7 @@ const Comment = function(props: CommentInterface){
 
   return (
   <Box sx={{display: 'flex'}}>
-    <Paper sx={{p:2}} variant='outlined'>
+    <Paper sx={{p:2, flexGrow: '1'}} variant='outlined'>
       <Grid container spacing={6} wrap='nowrap'>
         <Grid item> 
           <Typography variant='overline'>{props.user?.username || 'Anonymous'}:</Typography>      
@@ -197,7 +198,7 @@ const Comment = function(props: CommentInterface){
       </Grid>
       )}
       </Grid>
-      <Typography>
+      <Typography gutterBottom={true} paragraph={true} sx={{whiteSpace:"pre-line"}} >
             {props.content}
       </Typography>  
     </Paper>
@@ -210,8 +211,8 @@ const Post = function Post(){
     const { user, posts } = useIndexData();
     const loading = useLoadingState();
     const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
-    const date = regulariseDate(post?.date);
-    
+    const date = post && post.date ? regulariseDate(post.date) : ''
+  
     return (
        <>
        {NotificationsContextProvider(
@@ -224,14 +225,24 @@ const Post = function Post(){
               <>
               <Typography component='h1' variant='h4'>{post.title}</Typography>
               <Typography variant='subtitle1' color="text.secondary">{date}</Typography>
-              <Typography variant='body2' sx={{padding: '1rem', whiteSpace: 'pre-line'}}>
-                {post.content}
+              <Typography gutterBottom={true} paragraph={true} sx={{letterSpacing: '0.08rem', lineHeight:'1.75', padding: '1rem', whiteSpace: 'pre-line'}}>
+                {post.content} 
               </Typography>
-              <Divider />
+              <Divider sx={{my:2}}/>
+              <Typography component='h2' variant='h6'>
+                <strong>
+                  {post.comments.length} comments
+                </strong>
+              </Typography>
+              {post.comments.length === 0 ? (
+              <Typography variant='subtitle2'>
+                There don't appear to be any comments yet. Be the first to give your thoughts on this post.
+              </Typography>
+              ) : false}
           <Container>
-            <Stack spacing={2}>
+            <Stack spacing={2} sx={{p:2}}>
                 { (user?.member_status === 'privileged' || user?.member_status === 'admin') &&
-                <Grid container spacing={2} sx={{p:2, borderBottom: '1px solid', minWidth:'fit-content'}} wrap='nowrap'>
+                <Grid container spacing={2} wrap='nowrap'>
                   <Grid item>
                     <Avatar sx={{bgcolor:'#1976d2', width: '30px', height:'30px'}}>{user?.username[0].toUpperCase()}</Avatar>
                   </Grid>

@@ -84,7 +84,7 @@ export const useLoadingState = function(){
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(()=>{
-        const timeout = loading ? setTimeout(()=>{setLoading(false)},2000) : null
+        const timeout = loading ? setTimeout(()=>{setLoading(false)},2250) : null
 
         return () => {
             timeout === null ? null : clearTimeout(timeout)
