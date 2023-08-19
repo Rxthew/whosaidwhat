@@ -1,14 +1,96 @@
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import * as React from 'react';
 import { useErrorStates, useIndexData } from './helpers/hooks';
 import {  redirectToOrigin, settleErrors } from './helpers/services';
+import { restoreOriginalErrorState } from './helpers/utils';
+
+
+const DeleteUserDialog = function(){
+  const [open, setOpen] = React.useState(false);
+  const [errors, setErrors] = useErrorStates(['id']);
+  const { resetIndexData, user } = useIndexData();
+   
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    restoreOriginalErrorState(setErrors);
+    
+  };
+
+  const deleteUserFetcher = async function(){
+    const userId = user?._id;
+    const response = await fetch(`http://localhost:3000/user/${userId}`, {  //Update url when ready.
+     credentials: 'include',
+     headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
+     method: 'DELETE', 
+     mode: 'cors',
+     redirect: 'follow', 
+     referrer: window.location.href
+    })
+    const errorStatus = await settleErrors(response,setErrors)
+    return errorStatus && [resetIndexData, redirectToOrigin].map((action)=> action());
+};
+ 
+
+  const handleSubmit =  async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await deleteUserFetcher();
+  };
+
+
+  return (
+    <div>
+      <Button
+      type="button"
+      fullWidth
+      variant="contained"
+      sx={{ backgroundColor:"red", mt: 3, mb: 2 }}
+      onClick={ handleClickOpen }
+    >
+      Delete Your Profile
+      </Button>
+      <Dialog fullWidth open={open} onClose={handleClose}>
+        {errors.general.error && (
+        <Typography component="h2" variant="h6" sx={{color: "red", p:2}}>
+        Error: {errors.general.msg}
+        </Typography>
+        )}
+        {errors.id.error && (
+        <Typography component="h2" variant="h6" sx={{color: "red", p:2}}>
+        Error: {errors.id.msg}
+        </Typography>
+        )}
+        <DialogTitle>Delete User</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+           Be absolutely sure you want to delete this profile. Once deleted, it shall be impossible to retrieve.
+          </DialogContentText>
+            <form id="dialogForm" onSubmit={handleSubmit}></form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit" form="dialogForm">Confirm Delete</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
  
 const User = function User(){
 
@@ -17,7 +99,7 @@ const User = function User(){
 
   const updateUserFetcher = async function(data:string){
        const userId = user?._id;
-       const response = await fetch(`localhost:3000/${userId}`, {  //Update url when ready.
+       const response = await fetch(`http://localhost:3000/user/${userId}`, {  //Update url when ready.
         body: data,
         credentials: 'include',
         headers: {"Accept": "application/json", "Content-Type": "application/json", "Origin": `${window.location.origin}`},
@@ -259,6 +341,7 @@ const User = function User(){
                   Update your details
                 </Button>
               </Box>
+              <DeleteUserDialog />
             </Box>
           </Container>
       );
