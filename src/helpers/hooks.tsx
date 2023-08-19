@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { NotificationsContext, NotificationsDispatchContext } from "./contexts";
+import { LoadingStateResetContext, NotificationsContext, NotificationsDispatchContext } from "./contexts";
 import { PostsType, UserInterface, IndexInterface } from "./types";
 import { produceDefaultErrorPairs } from "./utils";
 
@@ -82,6 +82,9 @@ export const useIndexData = function(){
 
 export const useLoadingState = function(){
     const [loading, setLoading] = useState<boolean>(true);
+    const resetLoadingState = function(){
+        setLoading(true)
+    }
 
     useEffect(()=>{
         const timeout = loading ? setTimeout(()=>{setLoading(false)},2250) : null
@@ -92,7 +95,7 @@ export const useLoadingState = function(){
 
     },[loading])
 
-    return loading
+    return {loading, resetLoadingState}
 };
 
 export const useNotifications = function(){
@@ -102,3 +105,7 @@ export const useNotifications = function(){
 export const useNotificationsDispatch = function(){
     return useContext(NotificationsDispatchContext)
 };
+
+export const useResetLoadingState = function(){
+    return useContext(LoadingStateResetContext)
+}
