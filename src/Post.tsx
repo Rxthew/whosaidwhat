@@ -20,8 +20,8 @@ import Typography from "@mui/material/Typography";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import * as React from 'react'; 
 import { useParams } from "react-router-dom";
-import { NotificationsContextProvider } from './helpers/contexts';
-import { useErrorStates, useIndexData, useLoadingState, useNotifications, useNotificationsDispatch } from "./helpers/hooks";
+import { PostContextProvider } from './helpers/contexts';
+import { useErrorStates, useIndexData, useLoadingState, useNotifications, useNotificationsDispatch, useResetLoadingState } from "./helpers/hooks";
 import { CommentInterface, FormDialogProps, NotificationReducerInterface } from "./helpers/types";
 import { produceCommentFormProps } from './helpers/services';
 import { extractPostById, regulariseDate, restoreOriginalErrorState  } from "./helpers/utils";
@@ -32,8 +32,8 @@ const FormDialog = function(props: FormDialogProps){
     const [errors, setErrors] = useErrorStates(['_id', 'content', 'user', 'post']);
     const { resetIndexData } = useIndexData();
     const setNotifications = useNotificationsDispatch();
-
-    
+    const resetLoadingState = useResetLoadingState(); 
+     
     const handleClickOpen = () => {
       setOpen(true);
     };
@@ -43,7 +43,7 @@ const FormDialog = function(props: FormDialogProps){
       restoreOriginalErrorState(setErrors);
     };
 
-    const handleSubmit = props.handleSubmitConstructor({resetIndexData, setErrors, setNotifications});
+    const handleSubmit = props.handleSubmitConstructor({resetIndexData, resetLoadingState, setErrors, setNotifications});
 
     const FormButton = function(){
       return props.button(handleClickOpen)
@@ -209,13 +209,13 @@ const Comment = function(props: CommentInterface){
 const Post = function Post(){   
     const { postId } = useParams();
     const { user, posts } = useIndexData();
-    const loading = useLoadingState();
+    const { loading, resetLoadingState } = useLoadingState();
     const post = postId && posts && posts.length > 0 ? extractPostById(postId, posts) : null;
     const date = post && post.date ? regulariseDate(post.date) : ''
   
     return (
        <>
-       {NotificationsContextProvider(
+       {PostContextProvider(
        <Container sx={{py:4}}>
           {loading && (
             <Box sx={{display: 'flex', justifyContent: 'center'}}>
@@ -262,7 +262,7 @@ const Post = function Post(){
           </>
           )}
           {!post && !loading && (<Typography align='center' component='h2' variant='h5'>This post is not available right now.</Typography>)}
-        </Container>)} 
+        </Container>, resetLoadingState)} 
        </>
     )
 };

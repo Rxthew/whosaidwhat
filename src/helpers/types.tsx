@@ -55,6 +55,7 @@ export type PostsType = ReadonlyArray<PostInterface>
 
 export interface SubmitConstructorParams {
     resetIndexData: () => void,
+    resetLoadingState: null | (() => void),
     setErrors:  React.Dispatch<React.SetStateAction<Record<string, Record<string, string | boolean>>>>
     setNotifications: React.Dispatch<NotificationActionInterface> | null
 

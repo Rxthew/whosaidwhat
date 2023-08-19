@@ -65,12 +65,17 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
       
       const handleSubmitConstructor = function(params: SubmitConstructorParams){
 
-          const { resetIndexData, setErrors, setNotifications} = params;
+          const { resetIndexData, resetLoadingState, setErrors, setNotifications} = params;
 
 
          const notifyAddCommentSuccess = function(){
             setNotifications ? setNotifications({type: 'Add Comment'}) : console.error('setNotficiations is null')
          };
+
+         const addCommentReload = function(){
+            resetLoadingState ? resetLoadingState() : console.error('resetLoadingState is null')
+         };
+         
 
           const addCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
@@ -83,7 +88,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 referrer: window.location.href
               })
               const errorStatus = await settleErrors(response,setErrors)
-              return errorStatus && [resetIndexData, notifyAddCommentSuccess].map(action => action())
+              return errorStatus && [resetIndexData,addCommentReload,notifyAddCommentSuccess].map(action => action())
 
           };
 
@@ -123,11 +128,16 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
       
       const handleSubmitConstructor = function(params: SubmitConstructorParams){
 
-        const { resetIndexData, setErrors, setNotifications} = params;
+        const { resetIndexData, resetLoadingState, setErrors, setNotifications} = params;
 
         const notifyDeleteCommentSuccess = function(){
             setNotifications ? setNotifications({type: 'Delete Comment'}) : console.error('setNotficiations is null')
-         };   
+         };
+         
+         const deleteCommentReload = function(){
+            resetLoadingState ? resetLoadingState() : console.error('resetLoadingState is null')
+         };
+         
 
           const deleteCommentFetcher = async function(data:string){
               const response = await fetch("http://localhost:3000/comment", { //Update url when ready.
@@ -140,7 +150,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 referrer: window.location.href
               })
               const errorStatus = await settleErrors(response,setErrors)
-              return errorStatus && [resetIndexData, notifyDeleteCommentSuccess].map(action => action())
+              return errorStatus && [resetIndexData, deleteCommentReload, notifyDeleteCommentSuccess].map(action => action())
           }
 
           const handleSubmit = async function(event: React.FormEvent<HTMLFormElement>){
@@ -184,11 +194,15 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
 
       const handleSubmitConstructor = function(params: SubmitConstructorParams){
 
-        const { resetIndexData, setErrors, setNotifications} = params;
+        const { resetIndexData, resetLoadingState, setErrors, setNotifications} = params;
 
         const notifyEditCommentSuccess = function(){
             setNotifications ? setNotifications({type: 'Edit Comment'}) : console.error('setNotficiations is null')
          };   
+
+        const editCommentReload = function(){
+            resetLoadingState ? resetLoadingState() : console.error('resetLoadingState is null')
+         };
 
 
           const editCommentFetcher = async function(data:string){
@@ -202,7 +216,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 referrer: window.location.href
               })
               const errorStatus = await settleErrors(response,setErrors)
-              return errorStatus && [resetIndexData, notifyEditCommentSuccess].map(action => action())
+              return errorStatus && [resetIndexData, editCommentReload, notifyEditCommentSuccess].map(action => action())
 
           };
 

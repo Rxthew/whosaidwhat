@@ -70,7 +70,7 @@ const PostPreview = function PostPreview(props: postPreviewProps) {
 const Main = function(){
 
    const { posts } = useIndexData()
-   const loading = useLoadingState();
+   const { loading } = useLoadingState();
    const postsAreLoaded = posts && posts.length > 0 && loading === false;
    const noPostsLoaded = (!posts || posts.length === 0) && loading === false;
    
