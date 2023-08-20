@@ -8,6 +8,8 @@ import Login from './Login'
 import User from './User'
 import Signup from './Signup'
 import Post from './Post'
+import '@fontsource/roboto/400.css'
+
 
 
 const blogRouter = createBrowserRouter([{
@@ -45,3 +47,4 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <RouterProvider router={blogRouter}/>
   </React.StrictMode>,
 )
+

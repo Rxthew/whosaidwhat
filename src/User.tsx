@@ -158,7 +158,8 @@ const User = function User(){
                         <TextField
                         error
                         autoComplete="given-name"
-                        name="first_name"                        
+                        name="first_name"
+                        defaultValue={user?.first_name}                        
                         fullWidth
                         id="first_name"
                         label="First Name"
@@ -168,7 +169,8 @@ const User = function User(){
                       ):(
                         <TextField
                         autoComplete="given-name"
-                        name="first_name"                        
+                        name="first_name"
+                        defaultValue={user?.first_name}                        
                         fullWidth
                         id="first_name"
                         label="First Name"
@@ -184,6 +186,7 @@ const User = function User(){
                         id="last_name"
                         label="Last Name"
                         name="last_name"
+                        defaultValue={user?.last_name}
                         autoComplete="family-name"
                         helperText={errors.last_name.msg}
                         />
@@ -193,6 +196,7 @@ const User = function User(){
                         id="last_name"
                         label="Last Name"
                         name="last_name"
+                        defaultValue={user?.last_name}
                         autoComplete="family-name"
                         />
                       )}
@@ -206,6 +210,7 @@ const User = function User(){
                         id="username"
                         label="username"
                         name="username"
+                        defaultValue={user?.username}
                         autoComplete="username"
                         autoFocus
                         helperText={errors.username.msg}
@@ -219,6 +224,7 @@ const User = function User(){
                         id="username"
                         label="username"
                         name="username"
+                        defaultValue={user?.username}
                         autoComplete="username"
                         autoFocus
                         />
