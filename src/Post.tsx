@@ -29,7 +29,7 @@ import { extractPostById, regulariseDate, restoreOriginalErrorState  } from "./h
 
 const FormDialog = function(props: FormDialogProps){
     const [open, setOpen] = React.useState(false);
-    const [errors, setErrors] = useErrorStates(['_id', 'content', 'user', 'post']);
+    const [errors, setErrors] = useErrorStates(['_id', 'content', 'post', 'title', 'user']); 
     const { resetIndexData } = useIndexData();
     const setNotifications = useNotificationsDispatch();
     const resetLoadingState = useResetLoadingState(); 
