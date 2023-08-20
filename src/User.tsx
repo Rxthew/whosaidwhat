@@ -1,17 +1,19 @@
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import * as React from 'react';
 import { useErrorStates, useIndexData } from './helpers/hooks';
 import {  redirectToOrigin, settleErrors } from './helpers/services';
@@ -96,6 +98,11 @@ const User = function User(){
 
   const [errors,setErrors] = useErrorStates(['first_name', 'last_name', 'username', 'current_password', 'new_password', 'privilege_code', 'admin_code']);
   const { resetIndexData, user } = useIndexData();
+  const [regularMember, setRegularMember] = React.useState<boolean>(false);
+
+  const handleChange = function(event: React.ChangeEvent<HTMLInputElement>){
+      setRegularMember(event.target.checked)
+  };
 
   const updateUserFetcher = async function(data:string){
        const userId = user?._id;
@@ -151,8 +158,7 @@ const User = function User(){
                         <TextField
                         error
                         autoComplete="given-name"
-                        name="first_name"
-                        required
+                        name="first_name"                        
                         fullWidth
                         id="first_name"
                         label="First Name"
@@ -162,8 +168,7 @@ const User = function User(){
                       ):(
                         <TextField
                         autoComplete="given-name"
-                        name="first_name"
-                        required
+                        name="first_name"                        
                         fullWidth
                         id="first_name"
                         label="First Name"
@@ -174,8 +179,7 @@ const User = function User(){
                     <Grid item xs={12} sm={6}>
                     {errors.last_name.error ? (
                         <TextField
-                        error
-                        required
+                        error                       
                         fullWidth
                         id="last_name"
                         label="Last Name"
@@ -184,8 +188,7 @@ const User = function User(){
                         helperText={errors.last_name.msg}
                         />
                       ):(
-                        <TextField
-                        required
+                        <TextField                        
                         fullWidth
                         id="last_name"
                         label="Last Name"
@@ -198,8 +201,7 @@ const User = function User(){
                     {errors.username.error ? (
                         <TextField
                         error
-                        margin="normal"
-                        required
+                        margin="normal"                        
                         fullWidth
                         id="username"
                         label="username"
@@ -212,8 +214,7 @@ const User = function User(){
                     :
                   (
                         <TextField
-                        margin="normal"
-                        required
+                        margin="normal"                        
                         fullWidth
                         id="username"
                         label="username"
@@ -228,8 +229,7 @@ const User = function User(){
                     {errors.current_password.error ? (
                         <TextField
                         error
-                        margin="normal"
-                        required
+                        margin="normal"                        
                         fullWidth
                         type="password"
                         id="current_password"
@@ -259,7 +259,6 @@ const User = function User(){
                         <TextField
                         error
                         margin="normal"
-                        required
                         fullWidth
                         type="password"
                         id="new_password"
@@ -330,7 +329,14 @@ const User = function User(){
                         id="admin_code"
                           />
                       )}
-                    </Grid>    
+                    </Grid> 
+                    <Grid item>
+                    <FormControlLabel 
+                      control= {<Checkbox onChange={handleChange} name="regular" value={regularMember} />}
+                      label='Choose Regular Membership'
+                      sx={{color: 'grey'}}
+                      />
+                    </Grid>   
                 </Grid>             
                 <Button
                   type="submit"
