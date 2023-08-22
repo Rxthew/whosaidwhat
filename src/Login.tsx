@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { Link as FormLink } from 'react-router-dom';
 import { useErrorStates, useIndexData } from './helpers/hooks';
 import {  redirectToOrigin, settleErrors } from './helpers/services';
+import { handleStatus401 } from './helpers/utils';
 
  const Login = function Login(){
 
@@ -28,7 +29,8 @@ import {  redirectToOrigin, settleErrors } from './helpers/services';
         redirect: 'follow', 
         referrer: window.location.href
       })
-      const errorStatus = await settleErrors(response,setErrors)
+      const updatedResponse = handleStatus401(response);
+      const errorStatus = await settleErrors(updatedResponse,setErrors)
       return errorStatus && [resetIndexData, redirectToOrigin].map((action)=> action());
     }
 
