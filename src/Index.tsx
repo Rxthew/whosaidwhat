@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import About from './About'
 import Blog from './Blog'
 import Error from './Error'
 import Main from './Main'
@@ -20,6 +21,10 @@ const blogRouter = createBrowserRouter([{
     {
       index: true,
       element: <Main />
+    },
+    {
+      path: '/about',
+      element: <About />
     },
     {
       path: '/signup',

@@ -83,7 +83,7 @@ export default function Header(props:HeaderProps) {
           >
             <MenuIcon />
           </IconButton>
-          <Link component={HeaderLink} to={'/'} color="inherit" sx={{flexGrow: 1}}> 
+          <Link component={HeaderLink} to={'/'} color="inherit" sx={{flexGrow: 1, textDecoration: "none" }}> 
               <Typography
                 component="h1"
                 variant="h2"
@@ -95,7 +95,7 @@ export default function Header(props:HeaderProps) {
                 Who Said What
               </Typography>
             </Link>
-            <Link component={HeaderLink} to={'/'} color="inherit" sx={{flexGrow: 1}}>
+            <Link component={HeaderLink} to={'/'} color="inherit"  sx={{flexGrow: 1, textDecoration: "none" }}>
               <Typography
                 component="h1"
                 variant="h3"
@@ -113,6 +113,11 @@ export default function Header(props:HeaderProps) {
                 <Typography>
                   Welcome {username}
                 </Typography>
+                <Link component={HeaderLink} to={`/about`} color="inherit">
+                  <Button color="inherit" > 
+                     About
+                  </Button>
+                </Link>
                 <Link component={HeaderLink} to={`/user/${props.user?._id}`} color="inherit">
                   <Button color="inherit" >
                       Edit profile
@@ -124,6 +129,11 @@ export default function Header(props:HeaderProps) {
               </> )
               : 
               ( <>
+                <Link component={HeaderLink} to={`/about`} color="inherit">
+                  <Button color="inherit" > 
+                     About
+                  </Button>
+                </Link>
                 <Link component={HeaderLink} to={'/signup'} color="inherit">
                   <Button color="inherit" > 
                     Sign up
