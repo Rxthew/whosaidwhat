@@ -44,15 +44,15 @@ const DeleteUserDialog = function(){
      mode: 'cors',
      redirect: 'follow', 
      referrer: window.location.href
-    })
-    const errorStatus = await settleErrors(response,setErrors)
+    }).catch((err:Error)=> {throw err})
+    const errorStatus = await settleErrors(response,setErrors).catch((err:Error)=> {throw err})
     return errorStatus && [resetIndexData, redirectToOrigin].map((action)=> action());
 };
  
 
   const handleSubmit =  async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await deleteUserFetcher();
+    await deleteUserFetcher().catch((err:Error)=> {console.error(err)});
   };
 
 
@@ -114,8 +114,8 @@ const User = function User(){
         mode: 'cors',
         redirect: 'follow', 
         referrer: window.location.href
-       })
-       const errorStatus = await settleErrors(response,setErrors)
+       }).catch((err:Error)=> {throw err})
+       const errorStatus = await settleErrors(response,setErrors).catch((err:Error)=> {throw err})
        return errorStatus && [resetIndexData, redirectToOrigin].map((action)=> action());
   };
     
@@ -123,7 +123,7 @@ const User = function User(){
         event.preventDefault();
         const rawData = new FormData(event.currentTarget);
         const data = JSON.stringify(Object.fromEntries(rawData.entries()));
-        await updateUserFetcher(data);
+        await updateUserFetcher(data).catch((err:Error)=> {console.error(err)});
 
         
       };

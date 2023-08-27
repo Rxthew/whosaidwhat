@@ -20,7 +20,7 @@ export const redirectToOrigin = function(){
 
 export const settleErrors = async function(res:Response, setErrors:React.Dispatch<React.SetStateAction<Record<string,Record<string, string | boolean>>>>){
       
-    const response = await res.json();
+    const response = await res.json().catch((err:Error)=> {throw err});
 
     const checkForErrors = function(){
       const errorsStatus = 'errors' in response;
@@ -86,8 +86,8 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 mode: 'cors',
                 redirect: 'follow', 
                 referrer: window.location.href
-              })
-              const errorStatus = await settleErrors(response,setErrors)
+              }).catch((err:Error)=> {throw err})
+              const errorStatus = await settleErrors(response,setErrors).catch((err:Error)=> {throw err})
               return errorStatus && [resetIndexData,addCommentReload,notifyAddCommentSuccess].map(action => action())
 
           };
@@ -98,7 +98,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
               rawData.append('post', post);
               rawData.append('user',user);
               const data = JSON.stringify(Object.fromEntries(rawData.entries()));
-              await addCommentFetcher(data)
+              await addCommentFetcher(data).catch((err:Error)=> {console.error(err)})
           
           };
 
@@ -148,8 +148,8 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 mode: 'cors',
                 redirect: 'follow', 
                 referrer: window.location.href
-              })
-              const errorStatus = await settleErrors(response,setErrors)
+              }).catch((err:Error)=> {throw err})
+              const errorStatus = await settleErrors(response,setErrors).catch((err:Error)=> {throw err})
               return errorStatus && [resetIndexData, deleteCommentReload, notifyDeleteCommentSuccess].map(action => action())
           }
 
@@ -160,7 +160,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
               rawData.append('_id', _id);
               rawData.append('user', userId);
               const data = JSON.stringify(Object.fromEntries(rawData.entries()));
-              await deleteCommentFetcher(data);
+              await deleteCommentFetcher(data).catch((err:Error)=> {console.error(err)});
               return
           
           };
@@ -214,8 +214,8 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
                 mode: 'cors',
                 redirect: 'follow', 
                 referrer: window.location.href
-              })
-              const errorStatus = await settleErrors(response,setErrors)
+              }).catch((err:Error)=> {throw err})
+              const errorStatus = await settleErrors(response,setErrors).catch((err:Error)=> {throw err})
               return errorStatus && [resetIndexData, editCommentReload, notifyEditCommentSuccess].map(action => action())
 
           };
@@ -228,7 +228,7 @@ export const settleErrors = async function(res:Response, setErrors:React.Dispatc
               rawData.append('post', post);
               rawData.append('user', userId);
               const data = JSON.stringify(Object.fromEntries(rawData.entries()));
-              await editCommentFetcher(data)
+              await editCommentFetcher(data).catch((err:Error)=> {console.error(err)})
           
           };
 
