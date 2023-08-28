@@ -166,7 +166,7 @@ const Comment = function(props: CommentInterface){
           <Typography variant='overline'>{props.user?.username || 'Anonymous'}:</Typography>      
         </Grid>
         <Grid item>
-          <Typography variant='subtitle1' color='text.secondary'>{date}</Typography>
+        <Typography variant='subtitle1' color='text.secondary'>Last Updated: {date}</Typography>
         </Grid>
         {(isUserAdminMember || isUserPrivilegedOwner) && (
         <Grid item sx={{ml:'auto'}}>
@@ -224,7 +224,8 @@ const Post = function Post(){
           {post && !loading && (
               <>
               <Typography component='h1' variant='h4'>{post.title}</Typography>
-              <Typography variant='subtitle1' color="text.secondary">{date}</Typography>
+              <Typography variant='subtitle1' color="text.secondary">Written by: {post.user?.username}:</Typography>
+              <Typography variant='subtitle1' color="text.secondary">Last updated: {date}</Typography>
               <Typography gutterBottom={true} paragraph={true} sx={{letterSpacing: '0.08rem', lineHeight:'1.75', padding: '1rem', whiteSpace: 'pre-line'}}>
                 {post.content} 
               </Typography>
