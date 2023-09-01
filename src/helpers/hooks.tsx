@@ -59,7 +59,7 @@ export const useFetchIndexData = function () {
       const response = await fetch("https://wswapi.onrender.com/", {
         headers: {
           Accept: "application/json",
-          Origin: `${window.location}`,
+          Origin: `${window.location.origin}`,
         },
         credentials: "include",
         method: "GET",
