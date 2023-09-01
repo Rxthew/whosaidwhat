@@ -50,8 +50,7 @@ const About = function () {
           <List>
             <ListItem>
               <ListItemText
-                primary="A privileged membership gives you the privilege to post your own comments, edit, and delete them. A privileged account is the same as a regular 
-                    one, except that you have to input the privilege code when signing up."
+                primary="A privileged membership gives you the privilege to post your own comments, edit, and delete them. A privileged account is the same as a regular one, except that you have to input the privilege code when signing up."
                 inset={true}
                 primaryTypographyProps={{
                   style: {
@@ -66,9 +65,7 @@ const About = function () {
           <List>
             <ListItem>
               <ListItemText
-                primary="The highest membership tier is admin. This gives you access over all posts, users and comments. However, this takes place at a dedicated
-                    front end. Gaining access to an admin account is similar to the privileged version, except that instead of the privilege 
-                    code you have to provide the admin code when signing up. "
+                primary="The highest membership tier is admin. This gives you access over all posts, users and comments. However, this takes place at a dedicated front end. Gaining access to an admin account is similar to the privileged version, except that instead of the privilege code you have to provide the admin code when signing up. "
                 inset={true}
                 primaryTypographyProps={{
                   style: {
