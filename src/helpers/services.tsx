@@ -46,7 +46,7 @@ export const notificationReducer = function (
 };
 
 export const redirectToOrigin = function () {
-  return (window.location.href = window.location.origin);
+  return (window.location.href = `${window.location.origin}/whosaidwhat/`);
 };
 
 export const settleErrors = async function (
