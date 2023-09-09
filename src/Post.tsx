@@ -275,7 +275,7 @@ const Post = function Post() {
                 {post.title}
               </Typography>
               <Typography variant="subtitle1" color="text.secondary">
-                Written by: {post.user?.username}:
+                Written by: {post.user?.username}
               </Typography>
               <Typography variant="subtitle1" color="text.secondary">
                 Last updated: {date}

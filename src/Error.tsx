@@ -9,7 +9,7 @@ const Error = function Error() {
       <CssBaseline />
       <AppBar position="static" sx={{ padding: "1rem" }}>
         <Typography align="left" component="h1" variant="h4">
-          Something went wrong :(
+          Something went wrong 
         </Typography>
       </AppBar>
       <Typography align="center" component="h2" variant="h5">
