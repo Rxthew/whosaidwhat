@@ -68,7 +68,7 @@ export const useFetchIndexData = function () {
       }).catch((err: Error) => {
         console.error(err);
       });
-      return response
+      return response && response.ok
         ? setFreshIndexData(
             await response.json().catch((err: Error) => {
               throw err;
