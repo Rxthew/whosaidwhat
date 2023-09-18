@@ -193,16 +193,28 @@ const Comment = function (props: CommentInterface) {
   return (
     <Box sx={{ display: "flex" }}>
       <Paper sx={{ p: 2, flexGrow: "1" }} variant="outlined">
-        <Grid container spacing={6} wrap="nowrap">
-          <Grid item>
-            <Typography variant="overline">
-              {props.user?.username || "Anonymous"}:
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="subtitle1" color="text.secondary">
-              Last Updated: {date}
-            </Typography>
+        <Grid
+          container
+          rowSpacing={{ xs: 2, sm: 3 }}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          wrap="nowrap"
+        >
+          <Grid
+            container
+            item
+            spacing={{ xs: 1, sm: 2, md: 3 }}
+            wrap="wrap-reverse"
+          >
+            <Grid item>
+              <Typography variant="overline" sx={{ wordBreak: "break-word" }}>
+                {props.user?.username || "Anonymous"}:
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="subtitle1" color="text.secondary">
+                Last Updated: {date}
+              </Typography>
+            </Grid>
           </Grid>
           {(isUserAdminMember || isUserPrivilegedOwner) && (
             <Grid item sx={{ ml: "auto" }}>
@@ -271,10 +283,18 @@ const Post = function Post() {
           )}
           {post && !loading && (
             <>
-              <Typography component="h1" variant="h4">
+              <Typography
+                component="h1"
+                variant="h4"
+                sx={{ wordBreak: "break-word" }}
+              >
                 {post.title}
               </Typography>
-              <Typography variant="subtitle1" color="text.secondary">
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                sx={{ wordBreak: "break-word" }}
+              >
                 Written by: {post.user?.username}
               </Typography>
               <Typography variant="subtitle1" color="text.secondary">
@@ -315,6 +335,7 @@ const Post = function Post() {
                             bgcolor: "#1976d2",
                             width: "30px",
                             height: "30px",
+                            wordWrap: "break-word",
                           }}
                         >
                           {user?.username[0].toUpperCase()}

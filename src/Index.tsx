@@ -11,41 +11,44 @@ import Signup from "./Signup";
 import Post from "./Post";
 import "@fontsource/roboto/400.css";
 
-const blogRouter = createBrowserRouter([
+const blogRouter = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Blog />,
+      errorElement: <Error />,
+      children: [
+        {
+          index: true,
+          element: <Main />,
+        },
+        {
+          path: "/about",
+          element: <About />,
+        },
+        {
+          path: "/signup",
+          element: <Signup />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/post/:postId",
+          element: <Post />,
+        },
+        {
+          path: "/user/:userId",
+          element: <User />,
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    element: <Blog />,
-    errorElement: <Error />,
-    children: [
-      {
-        index: true,
-        element: <Main />,
-      },
-      {
-        path: "/about",
-        element: <About />,
-      },
-      {
-        path: "/signup",
-        element: <Signup />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/post/:postId",
-        element: <Post />,
-      },
-      {
-        path: "/user/:userId",
-        element: <User />,
-      },
-    ],
-  },
-], {
-  basename: '/whosaidwhat/'
-});
+    basename: "/whosaidwhat/",
+  }
+);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

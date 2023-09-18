@@ -64,12 +64,17 @@ export default function Header(props: HeaderProps) {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding sx={{justifyContent: "center"}}>
-            <Link component={HeaderLink} to={`/${item.replace(' ','').toLowerCase()}`} color="inherit" sx={{ textAlign: "center", textDecoration: "none" }}>
+          <ListItem key={item} disablePadding sx={{ justifyContent: "center" }}>
+            <Link
+              component={HeaderLink}
+              to={`/${item.replace(" ", "").toLowerCase()}`}
+              color="inherit"
+              sx={{ textAlign: "center", textDecoration: "none" }}
+            >
               <ListItemButton>
                 <ListItemText primary={item} />
               </ListItemButton>
-            </Link>    
+            </Link>
           </ListItem>
         ))}
       </List>
@@ -128,7 +133,9 @@ export default function Header(props: HeaderProps) {
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
               {username ? (
                 <>
-                  <Typography>Welcome {username}</Typography>
+                  <Typography sx={{ wordWrap: "break-word" }}>
+                    Welcome {username}
+                  </Typography>
                   <Link component={HeaderLink} to={`/about`} color="inherit">
                     <Button color="inherit">About</Button>
                   </Link>
